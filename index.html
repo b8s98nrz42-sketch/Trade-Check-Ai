@@ -1,101 +1,272 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>TradeCheck AI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-font-family:Arial,sans-serif;
-margin:0;
-background:#f3f4f6;
-color:#111;
+* {
+  box-sizing: border-box;
 }
 
-.container{
-max-width:800px;
-margin:auto;
-padding:20px;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f4f6;
+  color: #111827;
 }
 
-h1{
-margin-bottom:5px;
+.container {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 18px;
 }
 
-.subtitle{
-color:#555;
-margin-top:0;
+.header {
+  text-align: center;
+  padding: 10px 0 20px;
 }
 
-.box{
-background:white;
-padding:20px;
-border-radius:15px;
-margin:15px 0;
-box-shadow:0 2px 8px rgba(0,0,0,.08);
+.header h1 {
+  margin: 0;
+  font-size: 32px;
 }
 
-label{
-font-weight:bold;
-display:block;
-margin-top:15px;
-margin-bottom:6px;
+.subtitle {
+  margin: 7px 0 0;
+  color: #6b7280;
 }
 
-select,textarea{
-width:100%;
-box-sizing:border-box;
-padding:12px;
-border:1px solid #ccc;
-border-radius:10px;
-font-size:16px;
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.08);
 }
 
-textarea{
-height:130px;
-resize:vertical;
+.card h2,
+.card h3 {
+  margin-top: 0;
 }
 
-button{
-width:100%;
-padding:15px;
-margin-top:20px;
-background:#111;
-color:white;
-border:0;
-border-radius:10px;
-font-size:17px;
-font-weight:bold;
+label {
+  display: block;
+  font-weight: 700;
+  margin: 15px 0 7px;
 }
 
-button:active{
-transform:scale(.99);
+select,
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 11px;
+  background: white;
+  font-size: 16px;
+  outline: none;
 }
 
-.result{
-margin-top:20px;
+select:focus,
+input:focus {
+  border-color: #111827;
 }
 
-.score{
-font-size:28px;
-font-weight:bold;
+.search-wrap {
+  position: relative;
 }
 
-.good{
-font-weight:bold;
+.suggestions {
+  margin-top: 6px;
 }
 
-.warning{
-font-weight:bold;
+.suggestion {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  padding: 12px;
+  margin: 5px 0;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
 }
 
-.player{
-padding:6px 0;
-border-bottom:1px solid #eee;
+.suggestion:hover {
+  background: #e5e7eb;
 }
 
-small{
-color:#666;
+.selected {
+  margin-top: 12px;
+}
+
+.selected-player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f3f4f6;
+  border-radius: 11px;
+  padding: 11px 12px;
+  margin: 7px 0;
+}
+
+.player-info {
+  min-width: 0;
+}
+
+.player-name {
+  font-weight: 700;
+}
+
+.player-meta {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.remove-btn {
+  width: auto;
+  margin: 0;
+  padding: 7px 10px;
+  background: #e5e7eb;
+  color: #111827;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.analyze-btn {
+  width: 100%;
+  margin-top: 24px;
+  padding: 17px;
+  border: none;
+  border-radius: 12px;
+  background: #111827;
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.analyze-btn:hover {
+  background: #000;
+}
+
+.analyze-btn:active {
+  transform: scale(.99);
+}
+
+.clear-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 11px;
+  background: white;
+  color: #111827;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.error {
+  margin-top: 15px;
+  padding: 13px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-weight: 700;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+.verdict {
+  text-align: center;
+  padding: 20px;
+  border-radius: 15px;
+  background: #f3f4f6;
+}
+
+.verdict h2 {
+  margin: 0 0 8px;
+  font-size: 26px;
+}
+
+.diff {
+  font-size: 38px;
+  font-weight: 900;
+  margin: 8px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.score-card {
+  padding: 15px;
+  border-radius: 13px;
+  background: #f9fafb;
+  text-align: center;
+}
+
+.score-number {
+  font-size: 27px;
+  font-weight: 900;
+  margin-top: 5px;
+}
+
+.breakdown {
+  margin-top: 15px;
+}
+
+.breakdown-player {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.breakdown-player:last-child {
+  border-bottom: none;
+}
+
+.small {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.empty {
+  color: #9ca3af;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
 }
 </style>
 </head>
@@ -104,393 +275,684 @@ color:#666;
 
 <div class="container">
 
-<h1>TradeCheck AI 🏈</h1>
-<p class="subtitle">Fantasy football trade analyzer</p>
+  <div class="header">
+    <h1>TradeCheck AI 🏈</h1>
+    <p class="subtitle">Fantasy Football Trade Analyzer</p>
+  </div>
 
-<div class="box">
+  <div class="card">
 
-<h3>League Settings</h3>
+    <h2>League Settings</h2>
 
-<label>Scoring</label>
+    <label for="scoring">Scoring</label>
+    <select id="scoring">
+      <option value="ppr">PPR</option>
+      <option value="half">Half-PPR</option>
+      <option value="standard">Standard</option>
+    </select>
 
-<select id="scoring">
-<option value="ppr">PPR</option>
-<option value="half">Half-PPR</option>
-<option value="standard">Standard</option>
-</select>
+    <label for="teams">League Size</label>
+    <select id="teams">
+      <option value="10">10 Team</option>
+      <option value="12" selected>12 Team</option>
+      <option value="14">14 Team</option>
+    </select>
 
-<label>League Size</label>
+  </div>
 
-<select id="teams">
-<option value="10">10 Team</option>
-<option value="12" selected>12 Team</option>
-<option value="14">14 Team</option>
-</select>
+  <div class="card">
 
-<h3>You Give</h3>
+    <h2>You Give</h2>
 
-<input
-id="giveSearch"
-type="text"
-placeholder="Search for a player..."
-oninput="searchPlayers('give')"
->
+    <div class="search-wrap">
+      <input
+        id="giveSearch"
+        type="text"
+        placeholder="Search for a player..."
+        autocomplete="off"
+      >
+      <div id="giveSuggestions" class="suggestions"></div>
+    </div>
 
-<div id="giveSuggestions"></div>
+    <div id="giveSelected" class="selected">
+      <div class="empty">No players selected.</div>
+    </div>
 
-<div id="giveSelected"></div>
+  </div>
 
-<h3>You Receive</h3>
+  <div class="card">
 
-<input
-id="receiveSearch"
-type="text"
-placeholder="Search for a player..."
-oninput="searchPlayers('receive')"
->
+    <h2>You Receive</h2>
 
-<div id="receiveSuggestions"></div>
+    <div class="search-wrap">
+      <input
+        id="receiveSearch"
+        type="text"
+        placeholder="Search for a player..."
+        autocomplete="off"
+      >
+      <div id="receiveSuggestions" class="suggestions"></div>
+    </div>
 
-<div id="receiveSelected"></div>
+    <div id="receiveSelected" class="selected">
+      <div class="empty">No players selected.</div>
+    </div>
 
-<button onclick="analyze()">ANALYZE TRADE</button>
+  </div>
 
-<div id="result" class="result"></div>
+  <div class="card">
+
+    <button id="analyzeBtn" class="analyze-btn">
+      ANALYZE TRADE
+    </button>
+
+    <button id="clearBtn" class="clear-btn">
+      Clear Trade
+    </button>
+
+    <div id="error"></div>
+
+    <div id="result" class="result"></div>
+
+  </div>
 
 </div>
 
-</div>
-let selectedGive = [];
-let selectedReceive = [];
 
-function searchPlayers(side){
-
-let input = document.getElementById(
-side === "give" ? "giveSearch" : "receiveSearch"
-);
-
-let suggestions = document.getElementById(
-side === "give" ? "giveSuggestions" : "receiveSuggestions"
-);
-
-let query = input.value.toLowerCase().trim();
-
-suggestions.innerHTML = "";
-
-if(query.length === 0) return;
-
-Object.keys(players)
-.filter(name => name.includes(query))
-.slice(0,8)
-.forEach(name => {
-
-let p = players[name];
-
-let button = document.createElement("button");
-
-button.style.marginTop = "5px";
-button.style.background = "#f3f4f6";
-button.style.color = "#111";
-button.style.textAlign = "left";
-
-button.innerHTML =
-name.replace(/\b\w/g,l=>l.toUpperCase()) +
-" — " + p.pos;
-
-button.onclick = function(){
-
-if(side === "give"){
-selectedGive.push(name);
-document.getElementById("giveSearch").value = "";
-}else{
-selectedReceive.push(name);
-document.getElementById("receiveSearch").value = "";
-}
-
-suggestions.innerHTML = "";
-
-updateSelectedPlayers();
-
-};
-
-suggestions.appendChild(button);
-
-});
-
-}
-
-function updateSelectedPlayers(){
-
-document.getElementById("giveSelected").innerHTML =
-selectedGive.map(name =>
-"<div class='player'><b>" +
-name.replace(/\b\w/g,l=>l.toUpperCase()) +
-"</b> — " + players[name].pos +
-"</div>"
-).join("");
-
-document.getElementById("receiveSelected").innerHTML =
-selectedReceive.map(name =>
-"<div class='player'><b>" +
-name.replace(/\b\w/g,l=>l.toUpperCase()) +
-"</b> — " + players[name].pos +
-"</div>"
-).join("");
-
-}
 <script>
+
+/* =========================
+   PLAYER DATABASE
+========================= */
 
 const players = {
 
-"ceedee lamb":{value:98,pos:"WR"},
-"ja'marr chase":{value:99,pos:"WR"},
-"justin jefferson":{value:97,pos:"WR"},
-"bijan robinson":{value:98,pos:"RB"},
-"jahmyr gibbs":{value:97,pos:"RB"},
-"amon-ra st. brown":{value:94,pos:"WR"},
-"nico collins":{value:91,pos:"WR"},
-"puka nacua":{value:95,pos:"WR"},
-"malik nabers":{value:91,pos:"WR"},
-"garrett wilson":{value:89,pos:"WR"},
-"aj brown":{value:92,pos:"WR"},
-"devonta smith":{value:83,pos:"WR"},
-"tee higgins":{value:84,pos:"WR"},
-"mike evans":{value:78,pos:"WR"},
-"christian mccaffrey":{value:92,pos:"RB"},
-"jonathan taylor":{value:90,pos:"RB"},
-"saquon barkley":{value:95,pos:"RB"},
-"derrick henry":{value:82,pos:"RB"},
-"james cook":{value:87,pos:"RB"},
-"ashton jeanty":{value:90,pos:"RB"},
-"jaylen warren":{value:76,pos:"RB"},
-"breece hall":{value:88,pos:"RB"},
-"bijan robinson":{value:98,pos:"RB"},
-"de'von achane":{value:94,pos:"RB"},
-"james conner":{value:75,pos:"RB"},
-"josh jacobs":{value:84,pos:"RB"},
-"kenneth walker":{value:82,pos:"RB"},
-"chase brown":{value:80,pos:"RB"},
-"josh allen":{value:96,pos:"QB"},
-"lamar jackson":{value:94,pos:"QB"},
-"jalen hurts":{value:94,pos:"QB"},
-"patrick mahomes":{value:92,pos:"QB"},
-"joe burrow":{value:88,pos:"QB"},
-"trey mcbride":{value:91,pos:"TE"},
-"brock bowers":{value:91,pos:"TE"},
-"george kittle":{value:82,pos:"TE"},
-"travis kelce":{value:78,pos:"TE"},
-"sam laporta":{value:80,pos:"TE"},
-"harold fannin":{value:70,pos:"TE"},
-"george pickens":{value:84,pos:"WR"},
-"marvin harrison jr":{value:86,pos:"WR"},
-"rome odunze":{value:80,pos:"WR"},
-"drake london":{value:89,pos:"WR"},
-"brian thomas jr":{value:88,pos:"WR"},
-"jsn":{value:87,pos:"WR"},
-"jayden reed":{value:78,pos:"WR"},
-"ladd mcconkey":{value:80,pos:"WR"},
-"tetairoa mcmillan":{value:83,pos:"WR"},
-"devonta smith":{value:83,pos:"WR"},
-"chris olave":{value:87,pos:"WR"},
-"tyreek hill":{value:82,pos:"WR"},
-"dk metcalf":{value:81,pos:"WR"},
-"marvin mims":{value:65,pos:"WR"},
-"bucky irving":{value:79,pos:"RB"},
-"treveyon henderson":{value:82,pos:"RB"},
-"omarion hampton":{value:85,pos:"RB"},
-"alvin kamara":{value:79,pos:"RB"},
-"derrick henry":{value:82,pos:"RB"},
-"bo nix":{value:78,pos:"QB"},
-"jayden daniels":{value:86,pos:"QB"},
-"caleb williams":{value:80,pos:"QB"},
-"cj stroud":{value:79,pos:"QB"},
-"baker mayfield":{value:75,pos:"QB"},
-"bryce young":{value:68,pos:"QB"},
-"dalton kincaid":{value:76,pos:"TE"},
-"tj hockenson":{value:75,pos:"TE"},
-"evan engram":{value:72,pos:"TE"},
-"mark andrews":{value:76,pos:"TE"}
+  "ceedee lamb": { value: 98, pos: "WR" },
+  "ja'marr chase": { value: 99, pos: "WR" },
+  "justin jefferson": { value: 97, pos: "WR" },
+  "amon-ra st. brown": { value: 94, pos: "WR" },
+  "nico collins": { value: 91, pos: "WR" },
+  "puka nacua": { value: 95, pos: "WR" },
+  "malik nabers": { value: 91, pos: "WR" },
+  "garrett wilson": { value: 89, pos: "WR" },
+  "aj brown": { value: 92, pos: "WR" },
+  "devonta smith": { value: 83, pos: "WR" },
+  "tee higgins": { value: 84, pos: "WR" },
+  "mike evans": { value: 78, pos: "WR" },
+  "george pickens": { value: 84, pos: "WR" },
+  "marvin harrison jr": { value: 86, pos: "WR" },
+  "rome odunze": { value: 80, pos: "WR" },
+  "drake london": { value: 89, pos: "WR" },
+  "brian thomas jr": { value: 88, pos: "WR" },
+  "jsn": { value: 87, pos: "WR" },
+  "jayden reed": { value: 78, pos: "WR" },
+  "ladd mcconkey": { value: 80, pos: "WR" },
+  "tetairoa mcmillan": { value: 83, pos: "WR" },
+  "chris olave": { value: 87, pos: "WR" },
+  "tyreek hill": { value: 82, pos: "WR" },
+  "dk metcalf": { value: 81, pos: "WR" },
+  "marvin mims": { value: 65, pos: "WR" },
+
+  "bijan robinson": { value: 98, pos: "RB" },
+  "jahmyr gibbs": { value: 97, pos: "RB" },
+  "christian mccaffrey": { value: 92, pos: "RB" },
+  "jonathan taylor": { value: 90, pos: "RB" },
+  "saquon barkley": { value: 95, pos: "RB" },
+  "derrick henry": { value: 82, pos: "RB" },
+  "james cook": { value: 87, pos: "RB" },
+  "ashton jeanty": { value: 90, pos: "RB" },
+  "jaylen warren": { value: 76, pos: "RB" },
+  "breece hall": { value: 88, pos: "RB" },
+  "de'von achane": { value: 94, pos: "RB" },
+  "james conner": { value: 75, pos: "RB" },
+  "josh jacobs": { value: 84, pos: "RB" },
+  "kenneth walker": { value: 82, pos: "RB" },
+  "chase brown": { value: 80, pos: "RB" },
+  "bucky irving": { value: 79, pos: "RB" },
+  "treveyon henderson": { value: 82, pos: "RB" },
+  "omarion hampton": { value: 85, pos: "RB" },
+  "alvin kamara": { value: 79, pos: "RB" },
+
+  "josh allen": { value: 96, pos: "QB" },
+  "lamar jackson": { value: 94, pos: "QB" },
+  "jalen hurts": { value: 94, pos: "QB" },
+  "patrick mahomes": { value: 92, pos: "QB" },
+  "joe burrow": { value: 88, pos: "QB" },
+  "bo nix": { value: 78, pos: "QB" },
+  "jayden daniels": { value: 86, pos: "QB" },
+  "caleb williams": { value: 80, pos: "QB" },
+  "cj stroud": { value: 79, pos: "QB" },
+  "baker mayfield": { value: 75, pos: "QB" },
+  "bryce young": { value: 68, pos: "QB" },
+
+  "trey mcbride": { value: 91, pos: "TE" },
+  "brock bowers": { value: 91, pos: "TE" },
+  "george kittle": { value: 82, pos: "TE" },
+  "travis kelce": { value: 78, pos: "TE" },
+  "sam laporta": { value: 80, pos: "TE" },
+  "harold fannin": { value: 70, pos: "TE" },
+  "dalton kincaid": { value: 76, pos: "TE" },
+  "tj hockenson": { value: 75, pos: "TE" },
+  "evan engram": { value: 72, pos: "TE" },
+  "mark andrews": { value: 76, pos: "TE" }
 
 };
 
-function getPlayer(name){
 
-let key=name.toLowerCase().trim();
+/* =========================
+   TRADE STATE
+========================= */
 
-if(players[key]){
-return players[key];
+let selectedGive = [];
+let selectedReceive = [];
+
+
+/* =========================
+   HELPER FUNCTIONS
+========================= */
+
+function titleCase(name) {
+  return name.replace(/\b\w/g, letter => letter.toUpperCase());
 }
 
-return {
-value:65,
-pos:"Unknown"
-};
+function getPlayer(name) {
+  return players[name] || {
+    value: 50,
+    pos: "?"
+  };
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchPlayers(side) {
+
+  const input = document.getElementById(
+    side === "give" ? "giveSearch" : "receiveSearch"
+  );
+
+  const suggestions = document.getElementById(
+    side === "give" ? "giveSuggestions" : "receiveSuggestions"
+  );
+
+  const query = input.value.toLowerCase().trim();
+
+  suggestions.innerHTML = "";
+
+  if (!query) return;
+
+  const alreadySelected =
+    side === "give" ? selectedGive : selectedReceive;
+
+  const matches = Object.keys(players)
+    .filter(name =>
+      name.includes(query) &&
+      !alreadySelected.includes(name)
+    )
+    .slice(0, 8);
+
+  matches.forEach(name => {
+
+    const player = players[name];
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "suggestion";
+
+    button.textContent =
+      `${titleCase(name)} — ${player.pos} — Value ${player.value}`;
+
+    button.addEventListener("click", function() {
+      addPlayer(side, name);
+    });
+
+    suggestions.appendChild(button);
+
+  });
+}
+
+
+/* =========================
+   ADD PLAYER
+========================= */
+
+function addPlayer(side, name) {
+
+  const list =
+    side === "give" ? selectedGive : selectedReceive;
+
+  if (!list.includes(name)) {
+    list.push(name);
+  }
+
+  document.getElementById(
+    side === "give" ? "giveSearch" : "receiveSearch"
+  ).value = "";
+
+  document.getElementById(
+    side === "give" ? "giveSuggestions" : "receiveSuggestions"
+  ).innerHTML = "";
+
+  updateSelectedPlayers();
+}
+
+
+/* =========================
+   REMOVE PLAYER
+========================= */
+
+function removePlayer(side, index) {
+
+  if (side === "give") {
+    selectedGive.splice(index, 1);
+  } else {
+    selectedReceive.splice(index, 1);
+  }
+
+  updateSelectedPlayers();
+}
+
+
+/* =========================
+   DISPLAY SELECTED PLAYERS
+========================= */
+
+function updateSelectedPlayers() {
+
+  renderSelected(
+    "giveSelected",
+    selectedGive,
+    "give"
+  );
+
+  renderSelected(
+    "receiveSelected",
+    selectedReceive,
+    "receive"
+  );
+}
+
+
+function renderSelected(elementId, list, side) {
+
+  const container = document.getElementById(elementId);
+
+  if (list.length === 0) {
+    container.innerHTML =
+      '<div class="empty">No players selected.</div>';
+    return;
+  }
+
+  container.innerHTML = "";
+
+  list.forEach((name, index) => {
+
+    const player = getPlayer(name);
+
+    const row = document.createElement("div");
+    row.className = "selected-player";
+
+    row.innerHTML = `
+      <div class="player-info">
+        <div class="player-name">${titleCase(name)}</div>
+        <div class="player-meta">
+          ${player.pos} • Trade Value ${player.value}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="remove-btn"
+        onclick="removePlayer('${side}', ${index})"
+      >
+        Remove
+      </button>
+    `;
+
+    container.appendChild(row);
+
+  });
+}
+
+
+/* =========================
+   VALUE CALCULATION
+========================= */
+
+function calculatePlayerValue(name, scoring, teams) {
+
+  const player = getPlayer(name);
+
+  let value = player.value;
+
+  /*
+    Scoring adjustments
+  */
+
+  if (scoring === "ppr") {
+
+    if (player.pos === "WR") value += 2;
+    if (player.pos === "RB") value += 1;
+    if (player.pos === "TE") value += 1;
+
+  }
+
+  if (scoring === "standard") {
+
+    if (player.pos === "WR") value -= 2;
+    if (player.pos === "RB") value -= 1;
+
+  }
+
+  /*
+    League-size adjustment
+  */
+
+  if (teams === "10") {
+    value -= 2;
+  }
+
+  if (teams === "14") {
+    value += 3;
+  }
+
+  return value;
+}
+
+
+function calculateTotal(list, scoring, teams) {
+
+  return list.reduce(
+    (total, name) =>
+      total + calculatePlayerValue(name, scoring, teams),
+    0
+  );
 
 }
 
-function parsePlayers(text){
 
-return text
-.split("\n")
-.map(x=>x.trim())
-.filter(x=>x.length>0);
+/* =========================
+   TRADE ANALYSIS
+========================= */
+
+function analyze() {
+
+  const error = document.getElementById("error");
+  const result = document.getElementById("result");
+
+  error.innerHTML = "";
+  result.innerHTML = "";
+
+  if (
+    selectedGive.length === 0 ||
+    selectedReceive.length === 0
+  ) {
+
+    error.innerHTML =
+      '<div class="error">Select at least one player on both sides.</div>';
+
+    return;
+  }
+
+  const scoring =
+    document.getElementById("scoring").value;
+
+  const teams =
+    document.getElementById("teams").value;
+
+  const giveScore =
+    calculateTotal(
+      selectedGive,
+      scoring,
+      teams
+    );
+
+  const receiveScore =
+    calculateTotal(
+      selectedReceive,
+      scoring,
+      teams
+    );
+
+  const difference =
+    receiveScore - giveScore;
+
+  let verdict;
+  let explanation;
+
+  if (difference >= 15) {
+
+    verdict = "🔥 Major Value Gain";
+    explanation =
+      "You are receiving substantially more trade value.";
+
+  } else if (difference >= 7) {
+
+    verdict = "🔥 Strong Value Gain";
+    explanation =
+      "You are receiving noticeably more value.";
+
+  } else if (difference >= 3) {
+
+    verdict = "✅ Slight Value Gain";
+    explanation =
+      "You are receiving somewhat more value.";
+
+  } else if (difference > -3) {
+
+    verdict = "⚖️ Very Close Trade";
+    explanation =
+      "The overall values are extremely close.";
+
+  } else if (difference > -7) {
+
+    verdict = "⚠️ Slight Value Loss";
+    explanation =
+      "You are giving up somewhat more value.";
+
+  } else if (difference > -15) {
+
+    verdict = "⚠️ Significant Value Loss";
+    explanation =
+      "You are giving up noticeably more value.";
+
+  } else {
+
+    verdict = "❌ Major Value Loss";
+    explanation =
+      "You are giving up substantially more trade value.";
+
+  }
+
+  const differenceDisplay =
+    difference > 0
+      ? `+${difference}`
+      : difference;
+
+  result.innerHTML = `
+
+    <div class="verdict">
+
+      <h2>${verdict}</h2>
+
+      <p>${explanation}</p>
+
+      <div class="diff">
+        ${differenceDisplay}
+      </div>
+
+      <div class="small">
+        Trade value difference
+      </div>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="score-card">
+
+        <div class="small">
+          YOU GIVE
+        </div>
+
+        <div class="score-number">
+          ${giveScore}
+        </div>
+
+      </div>
+
+      <div class="score-card">
+
+        <div class="small">
+          YOU RECEIVE
+        </div>
+
+        <div class="score-number">
+          ${receiveScore}
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card breakdown">
+
+      <h3>You Give</h3>
+
+      ${createBreakdown(selectedGive, scoring, teams)}
+
+    </div>
+
+    <div class="card breakdown">
+
+      <h3>You Receive</h3>
+
+      ${createBreakdown(selectedReceive, scoring, teams)}
+
+    </div>
+
+    <p class="small">
+      ${scoring.toUpperCase()} • ${teams}-team league
+    </p>
+
+    <p class="small">
+      Trade values are estimates and should be combined with roster
+      construction, positional depth, starting requirements, and player
+      projections.
+    </p>
+  `;
+}
+
+
+/* =========================
+   BREAKDOWN
+========================= */
+
+function createBreakdown(list, scoring, teams) {
+
+  return list.map(name => {
+
+    const player = getPlayer(name);
+
+    const value =
+      calculatePlayerValue(
+        name,
+        scoring,
+        teams
+      );
+
+    return `
+      <div class="breakdown-player">
+
+        <div>
+          <strong>${titleCase(name)}</strong>
+          <div class="small">
+            ${player.pos}
+          </div>
+        </div>
+
+        <strong>${value}</strong>
+
+      </div>
+    `;
+
+  }).join("");
 
 }
 
-function calculateScore(list,scoring,teams){
 
-let total=0;
+/* =========================
+   CLEAR TRADE
+========================= */
 
-list.forEach(name=>{
+function clearTrade() {
 
-let player=getPlayer(name);
+  selectedGive = [];
+  selectedReceive = [];
 
-let value=player.value;
+  document.getElementById("giveSearch").value = "";
+  document.getElementById("receiveSearch").value = "";
 
-if(scoring==="ppr" && player.pos==="WR"){
-value+=2;
+  document.getElementById("giveSuggestions").innerHTML = "";
+  document.getElementById("receiveSuggestions").innerHTML = "";
+
+  document.getElementById("error").innerHTML = "";
+  document.getElementById("result").innerHTML = "";
+
+  updateSelectedPlayers();
 }
 
-if(scoring==="ppr" && player.pos==="RB"){
-value+=1;
-}
 
-if(scoring==="standard" && player.pos==="WR"){
-value-=2;
-}
+/* =========================
+   EVENT LISTENERS
+========================= */
 
-if(scoring==="standard" && player.pos==="RB"){
-value-=1;
-}
+document
+  .getElementById("giveSearch")
+  .addEventListener("input", function() {
+    searchPlayers("give");
+  });
 
-if(teams==="10"){
-value-=2;
-}
+document
+  .getElementById("receiveSearch")
+  .addEventListener("input", function() {
+    searchPlayers("receive");
+  });
 
-if(teams==="14"){
-value+=3;
-}
+/*
+  THIS IS THE IMPORTANT PART:
+  The Analyze button is explicitly connected
+  to the analyze() function.
+*/
 
-total+=value;
+document
+  .getElementById("analyzeBtn")
+  .addEventListener("click", function(event) {
 
-});
+    event.preventDefault();
 
-return total;
+    analyze();
 
-}
+  });
 
-function playerList(list){
 
-return list.map(name=>{
+document
+  .getElementById("clearBtn")
+  .addEventListener("click", function(event) {
 
-let p=getPlayer(name);
+    event.preventDefault();
 
-return `
-<div class="player">
-<b>${name}</b> — ${p.pos}
-<br>
-<small>Trade value: ${p.value}</small>
-</div>
-`;
+    clearTrade();
 
-}).join("");
+  });
 
-}
 
-function analyze(){
+/* Initial display */
 
-let give = selectedGive;
-let receive = selectedReceive;
-
-let scoring = document.getElementById("scoring").value;
-let teams = document.getElementById("teams").value;
-
-let result = document.getElementById("result");
-
-if(give.length === 0 || receive.length === 0){
-
-result.innerHTML =
-"<b>Please select at least one player on both sides.</b>";
-
-return;
-
-}
-
-let giveScore = calculateScore(give, scoring, teams);
-let receiveScore = calculateScore(receive, scoring, teams);
-
-let difference = receiveScore - giveScore;
-
-let verdict;
-
-if(difference >= 15){
-verdict = "🔥 Major value gain";
-}
-else if(difference >= 7){
-verdict = "🔥 Strong value gain";
-}
-else if(difference >= 3){
-verdict = "✅ Slight value gain";
-}
-else if(difference > -3){
-verdict = "⚖️ Very close trade";
-}
-else if(difference > -7){
-verdict = "⚠️ Slight value loss";
-}
-else if(difference > -15){
-verdict = "⚠️ Significant value loss";
-}
-else{
-verdict = "❌ Major value loss";
-}
-
-let explanation;
-
-if(difference >= 7){
-explanation =
-"The players you receive have more overall trade value than the players you give up.";
-}
-else if(difference <= -7){
-explanation =
-"The players you give up have more overall trade value than the players you receive.";
-}
-else{
-explanation =
-"The overall player values are relatively close.";
-}
-
-result.innerHTML = `
-<hr>
-
-<h2>${verdict}</h2>
-
-<p>${explanation}</p>
-
-<p class="score">${difference > 0 ? "+" : ""}${difference}</p>
-
-<p><b>You give:</b> ${giveScore} points</p>
-
-${playerList(give)}
-
-<p><b>You receive:</b> ${receiveScore} points</p>
-
-${playerList(receive)}
-
-<hr>
-
-<p>
-<b>Scoring:</b> ${scoring.toUpperCase()}
-<br>
-<b>League:</b> ${teams}-team
-</p>
-
-<small>
-TradeCheck AI is an early prototype. Player values are estimates.
-</small>
-`;
-
-}
+updateSelectedPlayers();
 
 </script>
 
