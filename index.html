@@ -1,958 +1,1987 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TradeCheck AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>TradeCheck AI — Fantasy Football Trade Analyzer</title>
 
 <style>
-* {
-  box-sizing: border-box;
+
+*{
+box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f3f4f6;
-  color: #111827;
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f3f4f6;
+color:#111827;
 }
 
-.container {
-  width: 100%;
-  max-width: 850px;
-  margin: 0 auto;
-  padding: 18px;
+.container{
+max-width:950px;
+margin:auto;
+padding:18px;
 }
 
-.header {
-  text-align: center;
-  padding: 10px 0 20px;
+header{
+text-align:center;
+padding:12px 0 20px;
 }
 
-.header h1 {
-  margin: 0;
-  font-size: 32px;
+header h1{
+margin:0;
+font-size:32px;
 }
 
-.subtitle {
-  margin: 7px 0 0;
-  color: #6b7280;
+header p{
+margin:7px 0 0;
+color:#6b7280;
 }
 
-.card {
-  background: white;
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+.card{
+background:#fff;
+border-radius:16px;
+padding:20px;
+margin-bottom:16px;
+box-shadow:0 3px 12px rgba(0,0,0,.07);
 }
 
-.card h2,
-.card h3 {
-  margin-top: 0;
+h2,h3{
+margin-top:0;
 }
 
-label {
-  display: block;
-  font-weight: 700;
-  margin: 15px 0 7px;
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+}
+
+.field{
+margin-bottom:12px;
+}
+
+label{
+display:block;
+font-weight:700;
+font-size:14px;
+margin-bottom:6px;
 }
 
 select,
-input {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #d1d5db;
-  border-radius: 11px;
-  background: white;
-  font-size: 16px;
-  outline: none;
+input{
+width:100%;
+padding:12px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:16px;
+background:#fff;
 }
 
-select:focus,
-input:focus {
-  border-color: #111827;
+button{
+border:0;
+border-radius:10px;
+padding:12px 15px;
+font-weight:700;
+font-size:15px;
+cursor:pointer;
 }
 
-.search-wrap {
-  position: relative;
+.primary{
+width:100%;
+background:#111827;
+color:#fff;
+font-size:18px;
+padding:16px;
+margin-top:10px;
 }
 
-.suggestions {
-  margin-top: 6px;
+.secondary{
+background:#e5e7eb;
+color:#111827;
 }
 
-.suggestion {
-  width: 100%;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
-  color: #111827;
-  padding: 12px;
-  margin: 5px 0;
-  border-radius: 10px;
-  text-align: left;
-  font-size: 15px;
-  cursor: pointer;
+.search-wrap{
+position:relative;
 }
 
-.suggestion:hover {
-  background: #e5e7eb;
+.suggestions{
+margin-top:5px;
 }
 
-.selected {
-  margin-top: 12px;
+.suggestion{
+display:flex;
+justify-content:space-between;
+align-items:center;
+width:100%;
+background:#f9fafb;
+border:1px solid #e5e7eb;
+color:#111827;
+margin-bottom:5px;
+text-align:left;
 }
 
-.selected-player {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  background: #f3f4f6;
-  border-radius: 11px;
-  padding: 11px 12px;
-  margin: 7px 0;
+.suggestion:hover{
+background:#e5e7eb;
 }
 
-.player-info {
-  min-width: 0;
+.player-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:8px;
+padding:10px;
+margin-top:7px;
+background:#f9fafb;
+border:1px solid #e5e7eb;
+border-radius:10px;
 }
 
-.player-name {
-  font-weight: 700;
+.player-info{
+display:flex;
+flex-direction:column;
+gap:3px;
 }
 
-.player-meta {
-  color: #6b7280;
-  font-size: 13px;
-  margin-top: 3px;
+.player-name{
+font-weight:700;
 }
 
-.remove-btn {
-  width: auto;
-  margin: 0;
-  padding: 7px 10px;
-  background: #e5e7eb;
-  color: #111827;
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
+.player-meta{
+font-size:13px;
+color:#6b7280;
 }
 
-.analyze-btn {
-  width: 100%;
-  margin-top: 24px;
-  padding: 17px;
-  border: none;
-  border-radius: 12px;
-  background: #111827;
-  color: white;
-  font-size: 18px;
-  font-weight: 800;
-  cursor: pointer;
-  touch-action: manipulation;
+.remove{
+background:#fee2e2;
+color:#991b1b;
+padding:7px 9px;
+font-size:12px;
 }
 
-.analyze-btn:hover {
-  background: #000;
+.empty{
+font-size:13px;
+color:#9ca3af;
+padding:8px 0;
 }
 
-.analyze-btn:active {
-  transform: scale(.99);
+.trade-columns{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
 }
 
-.clear-btn {
-  width: 100%;
-  margin-top: 9px;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 11px;
-  background: white;
-  color: #111827;
-  font-weight: 700;
-  cursor: pointer;
+.side-title{
+font-size:18px;
+font-weight:800;
+margin-bottom:10px;
 }
 
-.error {
-  margin-top: 15px;
-  padding: 13px;
-  border-radius: 10px;
-  background: #fef2f2;
-  color: #991b1b;
-  font-weight: 700;
+.side-total{
+font-size:25px;
+font-weight:800;
+margin-top:12px;
 }
 
-.result {
-  margin-top: 20px;
+.result{
+display:none;
 }
 
-.verdict {
-  text-align: center;
-  padding: 20px;
-  border-radius: 15px;
-  background: #f3f4f6;
+.verdict{
+text-align:center;
+padding:18px;
+border-radius:14px;
+background:#f3f4f6;
+margin-bottom:15px;
 }
 
-.verdict h2 {
-  margin: 0 0 8px;
-  font-size: 26px;
+.verdict h2{
+margin:0 0 6px;
 }
 
-.diff {
-  font-size: 38px;
-  font-weight: 900;
-  margin: 8px 0;
+.grade{
+font-size:36px;
+font-weight:900;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 15px;
+.meter{
+height:12px;
+background:#e5e7eb;
+border-radius:20px;
+overflow:hidden;
+margin:12px 0;
 }
 
-.score-card {
-  padding: 15px;
-  border-radius: 13px;
-  background: #f9fafb;
-  text-align: center;
+.meter-bar{
+height:100%;
+width:50%;
+background:#111827;
 }
 
-.score-number {
-  font-size: 27px;
-  font-weight: 900;
-  margin-top: 5px;
+.stat-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
 }
 
-.breakdown {
-  margin-top: 15px;
+.stat{
+background:#f9fafb;
+border-radius:12px;
+padding:13px;
+text-align:center;
 }
 
-.breakdown-player {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+.stat-number{
+font-size:23px;
+font-weight:800;
 }
 
-.breakdown-player:last-child {
-  border-bottom: none;
+.stat-label{
+font-size:12px;
+color:#6b7280;
+margin-top:3px;
 }
 
-.small {
-  color: #6b7280;
-  font-size: 13px;
+.insight{
+background:#f9fafb;
+border-left:4px solid #111827;
+padding:13px;
+border-radius:8px;
+margin-top:10px;
+line-height:1.5;
 }
 
-.empty {
-  color: #9ca3af;
-  font-size: 14px;
-  padding: 8px 0;
+.badge{
+display:inline-block;
+padding:4px 8px;
+border-radius:999px;
+font-size:12px;
+font-weight:700;
+background:#e5e7eb;
+margin-left:5px;
 }
 
-@media (max-width: 600px) {
-  .container {
-    padding: 12px;
-  }
-
-  .card {
-    padding: 16px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .header h1 {
-    font-size: 28px;
-  }
+.need-row{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
 }
+
+.need-row select{
+padding:9px;
+}
+
+.small{
+font-size:12px;
+color:#6b7280;
+line-height:1.5;
+}
+
+hr{
+border:0;
+border-top:1px solid #e5e7eb;
+margin:18px 0;
+}
+
+@media(max-width:650px){
+
+.grid,
+.trade-columns{
+grid-template-columns:1fr;
+}
+
+.stat-grid{
+grid-template-columns:1fr 1fr;
+}
+
+.need-row{
+grid-template-columns:1fr 1fr;
+}
+
+header h1{
+font-size:27px;
+}
+
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-  <div class="header">
-    <h1>TradeCheck AI 🏈</h1>
-    <p class="subtitle">Fantasy Football Trade Analyzer</p>
-  </div>
+<header>
+<h1>TradeCheck AI 🏈</h1>
+<p>League-aware fantasy football trade analysis</p>
+</header>
 
-  <div class="card">
 
-    <h2>League Settings</h2>
+<!-- LEAGUE SETTINGS -->
 
-    <label for="scoring">Scoring</label>
-    <select id="scoring">
-      <option value="ppr">PPR</option>
-      <option value="half">Half-PPR</option>
-      <option value="standard">Standard</option>
-    </select>
+<div class="card">
 
-    <label for="teams">League Size</label>
-    <select id="teams">
-      <option value="10">10 Team</option>
-      <option value="12" selected>12 Team</option>
-      <option value="14">14 Team</option>
-    </select>
+<h2>League Settings</h2>
 
-  </div>
+<div class="grid">
 
-  <div class="card">
+<div class="field">
 
-    <h2>You Give</h2>
+<label>League Type</label>
 
-    <div class="search-wrap">
-      <input
-        id="giveSearch"
-        type="text"
-        placeholder="Search for a player..."
-        autocomplete="off"
-      >
-      <div id="giveSuggestions" class="suggestions"></div>
-    </div>
+<select id="leagueType">
 
-    <div id="giveSelected" class="selected">
-      <div class="empty">No players selected.</div>
-    </div>
+<option value="redraft">
+Redraft
+</option>
 
-  </div>
+<option value="dynasty">
+Dynasty
+</option>
 
-  <div class="card">
+</select>
 
-    <h2>You Receive</h2>
+</div>
 
-    <div class="search-wrap">
-      <input
-        id="receiveSearch"
-        type="text"
-        placeholder="Search for a player..."
-        autocomplete="off"
-      >
-      <div id="receiveSuggestions" class="suggestions"></div>
-    </div>
 
-    <div id="receiveSelected" class="selected">
-      <div class="empty">No players selected.</div>
-    </div>
+<div class="field">
 
-  </div>
+<label>Scoring</label>
 
-  <div class="card">
+<select id="scoring">
 
-    <button id="analyzeBtn" class="analyze-btn">
-      ANALYZE TRADE
-    </button>
+<option value="ppr">
+PPR
+</option>
 
-    <button id="clearBtn" class="clear-btn">
-      Clear Trade
-    </button>
+<option value="half">
+Half-PPR
+</option>
 
-    <div id="error"></div>
+<option value="standard">
+Standard
+</option>
 
-    <div id="result" class="result"></div>
+</select>
 
-  </div>
+</div>
+
+
+<div class="field">
+
+<label>Quarterback Format</label>
+
+<select id="qbFormat">
+
+<option value="1qb">
+1 QB
+</option>
+
+<option value="sf">
+Superflex
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>League Size</label>
+
+<select id="teams">
+
+<option value="10">
+10 teams
+</option>
+
+<option value="12" selected>
+12 teams
+</option>
+
+<option value="14">
+14 teams
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>TE Premium</label>
+
+<select id="tePremium">
+
+<option value="0">
+No
+</option>
+
+<option value=".5">
++0.5
+</option>
+
+<option value="1">
++1.0
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>Package Adjustment</label>
+
+<select id="packageAdjust">
+
+<option value="on">
+On
+</option>
+
+<option value="off">
+Off
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ROSTER NEEDS -->
+
+<div class="card">
+
+<h2>Your Team Needs</h2>
+
+<p class="small">
+Choose how much your roster needs each position. This changes the roster-fit portion of the analysis.
+</p>
+
+<div class="need-row">
+
+<select id="needQB">
+<option value="0">QB: Good</option>
+<option value="2">QB: Need</option>
+<option value="4">QB: Desperate</option>
+</select>
+
+<select id="needRB">
+<option value="0">RB: Good</option>
+<option value="2">RB: Need</option>
+<option value="4">RB: Desperate</option>
+</select>
+
+<select id="needWR">
+<option value="0">WR: Good</option>
+<option value="2">WR: Need</option>
+<option value="4">WR: Desperate</option>
+</select>
+
+<select id="needTE">
+<option value="0">TE: Good</option>
+<option value="2">TE: Need</option>
+<option value="4">TE: Desperate</option>
+</select>
+
+</div>
+
+</div>
+
+
+<!-- TRADE BUILDER -->
+
+<div class="card">
+
+<h2>Build Your Trade</h2>
+
+<div class="trade-columns">
+
+
+<!-- GIVE -->
+
+<div>
+
+<div class="side-title">
+You Give
+</div>
+
+<div class="search-wrap">
+
+<input
+id="giveSearch"
+placeholder="Search player..."
+autocomplete="off"
+oninput="searchPlayers('give')"
+>
+
+<div
+id="giveSuggestions"
+class="suggestions">
+</div>
+
+</div>
+
+<div id="givePlayers">
+<div class="empty">
+No players selected.
+</div>
+</div>
+
+<div class="side-total">
+<span id="giveTotal">0</span>
+</div>
+
+</div>
+
+
+<!-- RECEIVE -->
+
+<div>
+
+<div class="side-title">
+You Receive
+</div>
+
+<div class="search-wrap">
+
+<input
+id="receiveSearch"
+placeholder="Search player..."
+autocomplete="off"
+oninput="searchPlayers('receive')"
+>
+
+<div
+id="receiveSuggestions"
+class="suggestions">
+</div>
+
+</div>
+
+<div id="receivePlayers">
+<div class="empty">
+No players selected.
+</div>
+</div>
+
+<div class="side-total">
+<span id="receiveTotal">0</span>
+</div>
+
+</div>
+
+</div>
+
+
+<button
+class="secondary"
+style="width:100%;margin-top:15px"
+onclick="swapSides()">
+⇄ Swap Sides
+</button>
+
+
+<button
+class="primary"
+onclick="analyzeTrade()">
+ANALYZE TRADE
+</button>
+
+</div>
+
+
+<!-- RESULTS -->
+
+<div
+id="result"
+class="card result">
+</div>
+
+
+<div class="card">
+
+<h3>About TradeCheck AI</h3>
+
+<p class="small">
+TradeCheck AI is an informational fantasy-football analysis tool.
+Its values are estimates and should not be treated as guaranteed outcomes.
+Roster context, league rules and player circumstances can change the result.
+</p>
+
+</div>
 
 </div>
 
 
 <script>
 
-/* =========================
-   PLAYER DATABASE
-========================= */
+
+/* =========================================================
+PLAYER DATABASE
+========================================================= */
 
 const players = {
 
-  "ceedee lamb": { value: 98, pos: "WR" },
-  "ja'marr chase": { value: 99, pos: "WR" },
-  "justin jefferson": { value: 97, pos: "WR" },
-  "amon-ra st. brown": { value: 94, pos: "WR" },
-  "nico collins": { value: 91, pos: "WR" },
-  "puka nacua": { value: 95, pos: "WR" },
-  "malik nabers": { value: 91, pos: "WR" },
-  "garrett wilson": { value: 89, pos: "WR" },
-  "aj brown": { value: 92, pos: "WR" },
-  "devonta smith": { value: 83, pos: "WR" },
-  "tee higgins": { value: 84, pos: "WR" },
-  "mike evans": { value: 78, pos: "WR" },
-  "george pickens": { value: 84, pos: "WR" },
-  "marvin harrison jr": { value: 86, pos: "WR" },
-  "rome odunze": { value: 80, pos: "WR" },
-  "drake london": { value: 89, pos: "WR" },
-  "brian thomas jr": { value: 88, pos: "WR" },
-  "jsn": { value: 87, pos: "WR" },
-  "jayden reed": { value: 78, pos: "WR" },
-  "ladd mcconkey": { value: 80, pos: "WR" },
-  "tetairoa mcmillan": { value: 83, pos: "WR" },
-  "chris olave": { value: 87, pos: "WR" },
-  "tyreek hill": { value: 82, pos: "WR" },
-  "dk metcalf": { value: 81, pos: "WR" },
-  "marvin mims": { value: 65, pos: "WR" },
+"ceedee lamb":
+{v:98,p:"WR",age:27},
 
-  "bijan robinson": { value: 98, pos: "RB" },
-  "jahmyr gibbs": { value: 97, pos: "RB" },
-  "christian mccaffrey": { value: 92, pos: "RB" },
-  "jonathan taylor": { value: 90, pos: "RB" },
-  "saquon barkley": { value: 95, pos: "RB" },
-  "derrick henry": { value: 82, pos: "RB" },
-  "james cook": { value: 87, pos: "RB" },
-  "ashton jeanty": { value: 90, pos: "RB" },
-  "jaylen warren": { value: 76, pos: "RB" },
-  "breece hall": { value: 88, pos: "RB" },
-  "de'von achane": { value: 94, pos: "RB" },
-  "james conner": { value: 75, pos: "RB" },
-  "josh jacobs": { value: 84, pos: "RB" },
-  "kenneth walker": { value: 82, pos: "RB" },
-  "chase brown": { value: 80, pos: "RB" },
-  "bucky irving": { value: 79, pos: "RB" },
-  "treveyon henderson": { value: 82, pos: "RB" },
-  "omarion hampton": { value: 85, pos: "RB" },
-  "alvin kamara": { value: 79, pos: "RB" },
+"ja'marr chase":
+{v:99,p:"WR",age:26},
 
-  "josh allen": { value: 96, pos: "QB" },
-  "lamar jackson": { value: 94, pos: "QB" },
-  "jalen hurts": { value: 94, pos: "QB" },
-  "patrick mahomes": { value: 92, pos: "QB" },
-  "joe burrow": { value: 88, pos: "QB" },
-  "bo nix": { value: 78, pos: "QB" },
-  "jayden daniels": { value: 86, pos: "QB" },
-  "caleb williams": { value: 80, pos: "QB" },
-  "cj stroud": { value: 79, pos: "QB" },
-  "baker mayfield": { value: 75, pos: "QB" },
-  "bryce young": { value: 68, pos: "QB" },
+"justin jefferson":
+{v:97,p:"WR",age:27},
 
-  "trey mcbride": { value: 91, pos: "TE" },
-  "brock bowers": { value: 91, pos: "TE" },
-  "george kittle": { value: 82, pos: "TE" },
-  "travis kelce": { value: 78, pos: "TE" },
-  "sam laporta": { value: 80, pos: "TE" },
-  "harold fannin": { value: 70, pos: "TE" },
-  "dalton kincaid": { value: 76, pos: "TE" },
-  "tj hockenson": { value: 75, pos: "TE" },
-  "evan engram": { value: 72, pos: "TE" },
-  "mark andrews": { value: 76, pos: "TE" }
+"bijan robinson":
+{v:98,p:"RB",age:24},
+
+"jahmyr gibbs":
+{v:97,p:"RB",age:24},
+
+"amon-ra st. brown":
+{v:94,p:"WR",age:26},
+
+"nico collins":
+{v:91,p:"WR",age:27},
+
+"puka nacua":
+{v:95,p:"WR",age:25},
+
+"malik nabers":
+{v:91,p:"WR",age:23},
+
+"garrett wilson":
+{v:89,p:"WR",age:26},
+
+"aj brown":
+{v:92,p:"WR",age:29},
+
+"devonta smith":
+{v:83,p:"WR",age:27},
+
+"tee higgins":
+{v:84,p:"WR",age:27},
+
+"mike evans":
+{v:78,p:"WR",age:33},
+
+"christian mccaffrey":
+{v:92,p:"RB",age:30},
+
+"jonathan taylor":
+{v:90,p:"RB",age:27},
+
+"saquon barkley":
+{v:95,p:"RB",age:29},
+
+"derrick henry":
+{v:82,p:"RB",age:32},
+
+"james cook":
+{v:87,p:"RB",age:27},
+
+"ashton jeanty":
+{v:90,p:"RB",age:22},
+
+"jaylen warren":
+{v:76,p:"RB",age:27},
+
+"breece hall":
+{v:88,p:"RB",age:25},
+
+"de'von achane":
+{v:94,p:"RB",age:24},
+
+"james conner":
+{v:75,p:"RB",age:31},
+
+"josh jacobs":
+{v:84,p:"RB",age:28},
+
+"kenneth walker":
+{v:82,p:"RB",age:25},
+
+"chase brown":
+{v:80,p:"RB",age:26},
+
+"bucky irving":
+{v:79,p:"RB",age:24},
+
+"treveyon henderson":
+{v:82,p:"RB",age:23},
+
+"omarion hampton":
+{v:85,p:"RB",age:23},
+
+"alvin kamara":
+{v:79,p:"RB",age:31},
+
+"josh allen":
+{v:96,p:"QB",age:30},
+
+"lamar jackson":
+{v:94,p:"QB",age:29},
+
+"jalen hurts":
+{v:94,p:"QB",age:28},
+
+"patrick mahomes":
+{v:92,p:"QB",age:31},
+
+"joe burrow":
+{v:88,p:"QB",age:29},
+
+"jayden daniels":
+{v:86,p:"QB",age:25},
+
+"caleb williams":
+{v:80,p:"QB",age:25},
+
+"cj stroud":
+{v:79,p:"QB",age:25},
+
+"bo nix":
+{v:78,p:"QB",age:26},
+
+"baker mayfield":
+{v:75,p:"QB",age:31},
+
+"trey mcbride":
+{v:91,p:"TE",age:26},
+
+"brock bowers":
+{v:91,p:"TE",age:25},
+
+"george kittle":
+{v:82,p:"TE",age:33},
+
+"travis kelce":
+{v:78,p:"TE",age:36},
+
+"sam laporta":
+{v:80,p:"TE",age:26},
+
+"harold fannin":
+{v:70,p:"TE",age:22},
+
+"dalton kincaid":
+{v:76,p:"TE",age:27},
+
+"tj hockenson":
+{v:75,p:"TE",age:29},
+
+"evan engram":
+{v:72,p:"TE",age:31},
+
+"mark andrews":
+{v:76,p:"TE",age:31},
+
+"george pickens":
+{v:84,p:"WR",age:25},
+
+"marvin harrison jr":
+{v:86,p:"WR",age:24},
+
+"rome odunze":
+{v:80,p:"WR",age:23},
+
+"drake london":
+{v:89,p:"WR",age:25},
+
+"brian thomas jr":
+{v:88,p:"WR",age:24},
+
+"jsn":
+{v:87,p:"WR",age:24},
+
+"jayden reed":
+{v:78,p:"WR",age:26},
+
+"ladd mcconkey":
+{v:80,p:"WR",age:25},
+
+"tetairoa mcmillan":
+{v:83,p:"WR",age:23},
+
+"chris olave":
+{v:87,p:"WR",age:26},
+
+"tyreek hill":
+{v:82,p:"WR",age:32},
+
+"dk metcalf":
+{v:81,p:"WR",age:29},
+
+"marvin mims":
+{v:65,p:"WR",age:24},
+
+"drake maye":
+{v:82,p:"QB",age:24},
+
+"bo nix":
+{v:78,p:"QB",age:26},
+
+"kyler murray":
+{v:78,p:"QB",age:29},
+
+"jordan love":
+{v:79,p:"QB",age:28},
+
+"trevor lawrence":
+{v:77,p:"QB",age:27},
+
+"tucker kraft":
+{v:73,p:"TE",age:25},
+
+"cole kmet":
+{v:67,p:"TE",age:27},
+
+"jake ferguson":
+{v:70,p:"TE",age:27},
+
+"pat freiermuth":
+{v:69,p:"TE",age:27}
 
 };
 
 
-/* =========================
-   TRADE STATE
-========================= */
+/* =========================================================
+STATE
+========================================================= */
 
-let selectedGive = [];
-let selectedReceive = [];
+let give=[];
+let receive=[];
 
 
-/* =========================
-   HELPER FUNCTIONS
-========================= */
+/* =========================================================
+HELPERS
+========================================================= */
 
-function titleCase(name) {
-  return name.replace(/\b\w/g, letter => letter.toUpperCase());
-}
+function titleCase(name){
 
-function getPlayer(name) {
-  return players[name] || {
-    value: 50,
-    pos: "?"
-  };
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-function searchPlayers(side) {
-
-  const input = document.getElementById(
-    side === "give" ? "giveSearch" : "receiveSearch"
-  );
-
-  const suggestions = document.getElementById(
-    side === "give" ? "giveSuggestions" : "receiveSuggestions"
-  );
-
-  const query = input.value.toLowerCase().trim();
-
-  suggestions.innerHTML = "";
-
-  if (!query) return;
-
-  const alreadySelected =
-    side === "give" ? selectedGive : selectedReceive;
-
-  const matches = Object.keys(players)
-    .filter(name =>
-      name.includes(query) &&
-      !alreadySelected.includes(name)
-    )
-    .slice(0, 8);
-
-  matches.forEach(name => {
-
-    const player = players[name];
-
-    const button = document.createElement("button");
-
-    button.type = "button";
-    button.className = "suggestion";
-
-    button.textContent =
-      `${titleCase(name)} — ${player.pos} — Value ${player.value}`;
-
-    button.addEventListener("click", function() {
-      addPlayer(side, name);
-    });
-
-    suggestions.appendChild(button);
-
-  });
-}
-
-
-/* =========================
-   ADD PLAYER
-========================= */
-
-function addPlayer(side, name) {
-
-  const list =
-    side === "give" ? selectedGive : selectedReceive;
-
-  if (!list.includes(name)) {
-    list.push(name);
-  }
-
-  document.getElementById(
-    side === "give" ? "giveSearch" : "receiveSearch"
-  ).value = "";
-
-  document.getElementById(
-    side === "give" ? "giveSuggestions" : "receiveSuggestions"
-  ).innerHTML = "";
-
-  updateSelectedPlayers();
-}
-
-
-/* =========================
-   REMOVE PLAYER
-========================= */
-
-function removePlayer(side, index) {
-
-  if (side === "give") {
-    selectedGive.splice(index, 1);
-  } else {
-    selectedReceive.splice(index, 1);
-  }
-
-  updateSelectedPlayers();
-}
-
-
-/* =========================
-   DISPLAY SELECTED PLAYERS
-========================= */
-
-function updateSelectedPlayers() {
-
-  renderSelected(
-    "giveSelected",
-    selectedGive,
-    "give"
-  );
-
-  renderSelected(
-    "receiveSelected",
-    selectedReceive,
-    "receive"
-  );
-}
-
-
-function renderSelected(elementId, list, side) {
-
-  const container = document.getElementById(elementId);
-
-  if (list.length === 0) {
-    container.innerHTML =
-      '<div class="empty">No players selected.</div>';
-    return;
-  }
-
-  container.innerHTML = "";
-
-  list.forEach((name, index) => {
-
-    const player = getPlayer(name);
-
-    const row = document.createElement("div");
-    row.className = "selected-player";
-
-    row.innerHTML = `
-      <div class="player-info">
-        <div class="player-name">${titleCase(name)}</div>
-        <div class="player-meta">
-          ${player.pos} • Trade Value ${player.value}
-        </div>
-      </div>
-
-      <button
-        type="button"
-        class="remove-btn"
-        onclick="removePlayer('${side}', ${index})"
-      >
-        Remove
-      </button>
-    `;
-
-    container.appendChild(row);
-
-  });
-}
-
-
-/* =========================
-   VALUE CALCULATION
-========================= */
-
-function calculatePlayerValue(name, scoring, teams) {
-
-  const player = getPlayer(name);
-
-  let value = player.value;
-
-  /*
-    Scoring adjustments
-  */
-
-  if (scoring === "ppr") {
-
-    if (player.pos === "WR") value += 2;
-    if (player.pos === "RB") value += 1;
-    if (player.pos === "TE") value += 1;
-
-  }
-
-  if (scoring === "standard") {
-
-    if (player.pos === "WR") value -= 2;
-    if (player.pos === "RB") value -= 1;
-
-  }
-
-  /*
-    League-size adjustment
-  */
-
-  if (teams === "10") {
-    value -= 2;
-  }
-
-  if (teams === "14") {
-    value += 3;
-  }
-
-  return value;
-}
-
-
-function calculateTotal(list, scoring, teams) {
-
-  return list.reduce(
-    (total, name) =>
-      total + calculatePlayerValue(name, scoring, teams),
-    0
-  );
+return name.replace(/\b\w/g,function(c){
+return c.toUpperCase();
+});
 
 }
 
 
-/* =========================
-   TRADE ANALYSIS
-========================= */
-
-function analyze() {
-
-  const error = document.getElementById("error");
-  const result = document.getElementById("result");
-
-  error.innerHTML = "";
-  result.innerHTML = "";
-
-  if (
-    selectedGive.length === 0 ||
-    selectedReceive.length === 0
-  ) {
-
-    error.innerHTML =
-      '<div class="error">Select at least one player on both sides.</div>';
-
-    return;
-  }
-
-  const scoring =
-    document.getElementById("scoring").value;
-
-  const teams =
-    document.getElementById("teams").value;
-
-  const giveScore =
-    calculateTotal(
-      selectedGive,
-      scoring,
-      teams
-    );
-
-  const receiveScore =
-    calculateTotal(
-      selectedReceive,
-      scoring,
-      teams
-    );
-
-  const difference =
-    receiveScore - giveScore;
-
-  let verdict;
-  let explanation;
-
-  if (difference >= 15) {
-
-    verdict = "🔥 Major Value Gain";
-    explanation =
-      "You are receiving substantially more trade value.";
-
-  } else if (difference >= 7) {
-
-    verdict = "🔥 Strong Value Gain";
-    explanation =
-      "You are receiving noticeably more value.";
-
-  } else if (difference >= 3) {
-
-    verdict = "✅ Slight Value Gain";
-    explanation =
-      "You are receiving somewhat more value.";
-
-  } else if (difference > -3) {
-
-    verdict = "⚖️ Very Close Trade";
-    explanation =
-      "The overall values are extremely close.";
-
-  } else if (difference > -7) {
-
-    verdict = "⚠️ Slight Value Loss";
-    explanation =
-      "You are giving up somewhat more value.";
-
-  } else if (difference > -15) {
-
-    verdict = "⚠️ Significant Value Loss";
-    explanation =
-      "You are giving up noticeably more value.";
-
-  } else {
-
-    verdict = "❌ Major Value Loss";
-    explanation =
-      "You are giving up substantially more trade value.";
-
-  }
-
-  const differenceDisplay =
-    difference > 0
-      ? `+${difference}`
-      : difference;
-
-  result.innerHTML = `
-
-    <div class="verdict">
-
-      <h2>${verdict}</h2>
-
-      <p>${explanation}</p>
-
-      <div class="diff">
-        ${differenceDisplay}
-      </div>
-
-      <div class="small">
-        Trade value difference
-      </div>
-
-    </div>
-
-    <div class="grid">
-
-      <div class="score-card">
-
-        <div class="small">
-          YOU GIVE
-        </div>
-
-        <div class="score-number">
-          ${giveScore}
-        </div>
-
-      </div>
-
-      <div class="score-card">
-
-        <div class="small">
-          YOU RECEIVE
-        </div>
-
-        <div class="score-number">
-          ${receiveScore}
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="card breakdown">
-
-      <h3>You Give</h3>
-
-      ${createBreakdown(selectedGive, scoring, teams)}
-
-    </div>
-
-    <div class="card breakdown">
-
-      <h3>You Receive</h3>
-
-      ${createBreakdown(selectedReceive, scoring, teams)}
-
-    </div>
-
-    <p class="small">
-      ${scoring.toUpperCase()} • ${teams}-team league
-    </p>
-
-    <p class="small">
-      Trade values are estimates and should be combined with roster
-      construction, positional depth, starting requirements, and player
-      projections.
-    </p>
-  `;
-}
-
-
-/* =========================
-   BREAKDOWN
-========================= */
-
-function createBreakdown(list, scoring, teams) {
-
-  return list.map(name => {
-
-    const player = getPlayer(name);
-
-    const value =
-      calculatePlayerValue(
-        name,
-        scoring,
-        teams
-      );
-
-    return `
-      <div class="breakdown-player">
-
-        <div>
-          <strong>${titleCase(name)}</strong>
-          <div class="small">
-            ${player.pos}
-          </div>
-        </div>
-
-        <strong>${value}</strong>
-
-      </div>
-    `;
-
-  }).join("");
+function escapeHTML(str){
+
+return str
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
-/* =========================
-   CLEAR TRADE
-========================= */
+/* =========================================================
+SEARCH
+========================================================= */
 
-function clearTrade() {
+function searchPlayers(side){
 
-  selectedGive = [];
-  selectedReceive = [];
+const input=document.getElementById(
+side==="give" ? "giveSearch" : "receiveSearch"
+);
 
-  document.getElementById("giveSearch").value = "";
-  document.getElementById("receiveSearch").value = "";
+const box=document.getElementById(
+side==="give" ? "giveSuggestions" : "receiveSuggestions"
+);
 
-  document.getElementById("giveSuggestions").innerHTML = "";
-  document.getElementById("receiveSuggestions").innerHTML = "";
+const query=input.value.toLowerCase().trim();
 
-  document.getElementById("error").innerHTML = "";
-  document.getElementById("result").innerHTML = "";
+box.innerHTML="";
 
-  updateSelectedPlayers();
+if(query.length<1){
+return;
+}
+
+const selected=side==="give" ? give : receive;
+
+const matches=Object.keys(players)
+.filter(function(name){
+
+return name.includes(query)
+&& !selected.includes(name);
+
+})
+.slice(0,8);
+
+
+matches.forEach(function(name){
+
+const p=players[name];
+
+const button=document.createElement("button");
+
+button.className="suggestion";
+
+button.innerHTML=`
+<span>
+<b>${titleCase(name)}</b><br>
+<small>${p.p}</small>
+</span>
+<span>${p.v}</span>
+`;
+
+button.onclick=function(){
+
+addPlayer(side,name);
+
+input.value="";
+
+box.innerHTML="";
+
+};
+
+box.appendChild(button);
+
+});
+
 }
 
 
-/* =========================
-   EVENT LISTENERS
-========================= */
+function addPlayer(side,name){
 
-document
-  .getElementById("giveSearch")
-  .addEventListener("input", function() {
-    searchPlayers("give");
-  });
+if(side==="give"){
 
-document
-  .getElementById("receiveSearch")
-  .addEventListener("input", function() {
-    searchPlayers("receive");
-  });
+if(give.length>=5)return;
+
+if(!give.includes(name)){
+give.push(name);
+}
+
+}else{
+
+if(receive.length>=5)return;
+
+if(!receive.includes(name)){
+receive.push(name);
+}
+
+}
+
+renderPlayers();
+
+}
+
+
+function removePlayer(side,name){
+
+if(side==="give"){
+
+give=give.filter(function(x){
+return x!==name;
+});
+
+}else{
+
+receive=receive.filter(function(x){
+return x!==name;
+});
+
+}
+
+renderPlayers();
+
+}
+
+
+function renderPlayers(){
+
+const giveBox=document.getElementById("givePlayers");
+
+const receiveBox=document.getElementById("receivePlayers");
+
+
+if(give.length===0){
+
+giveBox.innerHTML=
+'<div class="empty">No players selected.</div>';
+
+}else{
+
+giveBox.innerHTML=give.map(function(name){
+
+const p=players[name];
+
+return `
+<div class="player-card">
+
+<div class="player-info">
+
+<div class="player-name">
+${titleCase(name)}
+<span class="badge">${p.p}</span>
+</div>
+
+<div class="player-meta">
+Base value: ${p.v}
+</div>
+
+</div>
+
+<button
+class="remove"
+onclick="removePlayer('give','${name}')">
+Remove
+</button>
+
+</div>
+`;
+
+}).join("");
+
+}
+
+
+if(receive.length===0){
+
+receiveBox.innerHTML=
+'<div class="empty">No players selected.</div>';
+
+}else{
+
+receiveBox.innerHTML=receive.map(function(name){
+
+const p=players[name];
+
+return `
+<div class="player-card">
+
+<div class="player-info">
+
+<div class="player-name">
+${titleCase(name)}
+<span class="badge">${p.p}</span>
+</div>
+
+<div class="player-meta">
+Base value: ${p.v}
+</div>
+
+</div>
+
+<button
+class="remove"
+onclick="removePlayer('receive','${name}')">
+Remove
+</button>
+
+</div>
+`;
+
+}).join("");
+
+}
+
+updateTotals();
+
+}
+
+
+function updateTotals(){
+
+const scoring=document.getElementById("scoring").value;
+
+const teams=parseInt(
+document.getElementById("teams").value
+);
+
+const qbFormat=document.getElementById("qbFormat").value;
+
+const tePremium=parseFloat(
+document.getElementById("tePremium").value
+);
+
+
+let gt=0;
+let rt=0;
+
+
+give.forEach(function(name){
+
+gt+=adjustedValue(
+name,
+scoring,
+teams,
+qbFormat,
+tePremium
+);
+
+});
+
+
+receive.forEach(function(name){
+
+rt+=adjustedValue(
+name,
+scoring,
+teams,
+qbFormat,
+tePremium
+);
+
+});
+
+
+document.getElementById("giveTotal").textContent=
+Math.round(gt);
+
+document.getElementById("receiveTotal").textContent=
+Math.round(rt);
+
+}
+
+
+/* =========================================================
+VALUE ENGINE
+========================================================= */
+
+function adjustedValue(
+name,
+scoring,
+teams,
+qbFormat,
+tePremium
+){
+
+const p=players[name];
+
+let value=p.v;
+
+
+/* scoring */
+
+if(scoring==="ppr"){
+
+if(p.p==="WR")value+=2;
+if(p.p==="RB")value+=1;
+
+}
+
+if(scoring==="standard"){
+
+if(p.p==="WR")value-=2;
+if(p.p==="RB")value-=1;
+
+}
+
+
+/* TE premium */
+
+if(p.p==="TE"){
+
+value+=tePremium*3;
+
+}
+
+
+/* league size */
+
+if(teams===10){
+
+value-=2;
+
+}
+
+if(teams===14){
+
+value+=3;
+
+}
+
+
+/* superflex */
+
+if(qbFormat==="sf" && p.p==="QB"){
+
+value+=12;
+
+}
+
+
+/* dynasty adjustment */
+
+if(
+document.getElementById("leagueType").value==="dynasty"
+){
 
 /*
-  THIS IS THE IMPORTANT PART:
-  The Analyze button is explicitly connected
-  to the analyze() function.
+Young players get a modest runway premium.
+Older players lose some long-term value.
 */
 
-document
-  .getElementById("analyzeBtn")
-  .addEventListener("click", function(event) {
+if(p.age<=24){
 
-    event.preventDefault();
+value+=5;
 
-    analyze();
+}else if(p.age<=27){
 
-  });
+value+=2;
 
+}else if(p.age>=31){
 
-document
-  .getElementById("clearBtn")
-  .addEventListener("click", function(event) {
+value-=5;
 
-    event.preventDefault();
+}
 
-    clearTrade();
-
-  });
+}
 
 
-/* Initial display */
+return value;
 
-updateSelectedPlayers();
+}
+
+
+/* =========================================================
+PACKAGE ADJUSTMENT
+========================================================= */
+
+function packageAdjustment(side){
+
+const enabled=
+document.getElementById("packageAdjust").value==="on";
+
+if(!enabled){
+return 0;
+}
+
+if(side.length<=1){
+return 0;
+}
+
+
+/*
+Multiple players are useful,
+but several depth pieces should not
+automatically equal one elite starter.
+*/
+
+if(side.length===2){
+return -3;
+}
+
+if(side.length===3){
+return -7;
+}
+
+if(side.length===4){
+return -11;
+}
+
+return -15;
+
+}
+
+
+/* =========================================================
+POSITIONAL NEED
+========================================================= */
+
+function needValue(position){
+
+const ids={
+QB:"needQB",
+RB:"needRB",
+WR:"needWR",
+TE:"needTE"
+};
+
+return parseInt(
+document.getElementById(ids[position]).value
+);
+
+}
+
+
+function rosterFit(list){
+
+let total=0;
+
+list.forEach(function(name){
+
+total+=needValue(
+players[name].p
+);
+
+});
+
+return total;
+
+}
+
+
+/* =========================================================
+SCARCITY
+========================================================= */
+
+function scarcity(list){
+
+let score=0;
+
+list.forEach(function(name){
+
+const p=players[name];
+
+if(p.p==="RB")score+=2;
+
+if(p.p==="TE")score+=2;
+
+if(
+p.p==="QB"
+&& document.getElementById("qbFormat").value==="sf"
+){
+
+score+=4;
+
+}
+
+});
+
+return score;
+
+}
+
+
+/* =========================================================
+STARTER IMPACT
+========================================================= */
+
+function starterImpact(list){
+
+let score=0;
+
+list.forEach(function(name){
+
+const p=players[name];
+
+if(p.v>=90){
+score+=5;
+}else if(p.v>=80){
+score+=3;
+}else if(p.v>=70){
+score+=1;
+}
+
+});
+
+return score;
+
+}
+
+
+/* =========================================================
+TRADE ANALYSIS
+========================================================= */
+
+function analyzeTrade(){
+
+if(give.length===0 || receive.length===0){
+
+alert(
+"Select at least one player on both sides."
+);
+
+return;
+
+}
+
+
+const scoring=
+document.getElementById("scoring").value;
+
+const teams=
+parseInt(document.getElementById("teams").value);
+
+const qbFormat=
+document.getElementById("qbFormat").value;
+
+const tePremium=
+parseFloat(
+document.getElementById("tePremium").value
+);
+
+
+/* raw values */
+
+let giveRaw=0;
+
+let receiveRaw=0;
+
+
+give.forEach(function(name){
+
+giveRaw+=adjustedValue(
+name,
+scoring,
+teams,
+qbFormat,
+tePremium
+);
+
+});
+
+
+receive.forEach(function(name){
+
+receiveRaw+=adjustedValue(
+name,
+scoring,
+teams,
+qbFormat,
+tePremium
+);
+
+});
+
+
+/* package */
+
+const givePackage=
+packageAdjustment(give);
+
+const receivePackage=
+packageAdjustment(receive);
+
+
+/* roster fit */
+
+const giveNeed=
+rosterFit(give);
+
+const receiveNeed=
+rosterFit(receive);
+
+
+/* scarcity */
+
+const giveScarcity=
+scarcity(give);
+
+const receiveScarcity=
+scarcity(receive);
+
+
+/* starter impact */
+
+const giveStarter=
+starterImpact(give);
+
+const receiveStarter=
+starterImpact(receive);
+
+
+/*
+The player's value is the main signal.
+Roster context is deliberately a smaller adjustment.
+*/
+
+const giveAdjusted=
+giveRaw+
+givePackage+
+giveNeed+
+giveScarcity+
+giveStarter;
+
+const receiveAdjusted=
+receiveRaw+
+receivePackage+
+receiveNeed+
+receiveScarcity+
+receiveStarter;
+
+
+const difference=
+receiveAdjusted-giveAdjusted;
+
+
+/* fairness */
+
+let fairness=
+Math.max(
+0,
+Math.min(
+100,
+50+(difference*2)
+)
+);
+
+fairness=Math.round(fairness);
+
+
+/* verdict */
+
+let verdict;
+
+if(difference>=15){
+
+verdict="🔥 Strong trade for you";
+
+}else if(difference>=7){
+
+verdict="🟢 Leaning your way";
+
+}else if(difference>=3){
+
+verdict="🟡 Slight edge for you";
+
+}else if(difference>-3){
+
+verdict="⚖️ Very close";
+
+}else if(difference>-7){
+
+verdict="🟠 Slight edge against you";
+
+}else if(difference>-15){
+
+verdict="🔴 Leaning against you";
+
+}else{
+
+verdict="🚨 Strong edge against you";
+
+}
+
+
+/* package type */
+
+let packageText="";
+
+if(
+give.length===1 &&
+receive.length===2
+){
+
+packageText=
+"This is a 1-for-2 consolidation trade. You gain roster depth, but you give up one roster slot for two.";
+
+}
+
+else if(
+give.length===2 &&
+receive.length===1
+){
+
+packageText=
+"This is a 2-for-1 consolidation trade. You turn two assets into one stronger asset, but lose depth.";
+
+}
+
+else if(
+give.length!==receive.length
+){
+
+packageText=
+"This is a multi-player package, so the engine applies a roster/package adjustment.";
+
+}
+
+else{
+
+packageText=
+"This is a balanced player-count trade.";
+
+}
+
+
+/* explanation */
+
+let explanations=[];
+
+
+if(receiveRaw>giveRaw){
+
+explanations.push(
+"The players you're receiving have higher combined base value."
+);
+
+}else if(receiveRaw<giveRaw){
+
+explanations.push(
+"The players you're giving up have higher combined base value."
+);
+
+}else{
+
+explanations.push(
+"The two sides are close in base player value."
+);
+
+}
+
+
+if(receiveNeed>giveNeed){
+
+explanations.push(
+"The incoming players also address positions you've marked as needs."
+);
+
+}else if(receiveNeed<giveNeed){
+
+explanations.push(
+"The trade moves more value away from positions you've marked as needs."
+);
+
+}
+
+
+if(receiveStarter>giveStarter){
+
+explanations.push(
+"The incoming side contains more high-value starter-level assets."
+);
+
+}else if(receiveStarter<giveStarter){
+
+explanations.push(
+"You are giving up more starter-level value than you're receiving."
+);
+
+}
+
+
+if(qbFormat==="sf"){
+
+explanations.push(
+"Superflex is enabled, so quarterback scarcity is included."
+);
+
+}
+
+
+if(
+document.getElementById("leagueType").value==="dynasty"
+){
+
+explanations.push(
+"Dynasty mode includes a modest age/runway adjustment."
+);
+
+}
+
+
+/* counter */
+
+let counter="";
+
+if(Math.abs(difference)>=7){
+
+if(difference>0){
+
+counter=
+"Your side has an edge. If you want to make the offer more appealing, consider whether you can remove a smaller piece from your side rather than adding value unnecessarily.";
+
+}else{
+
+counter=
+"Consider asking for a smaller additional piece from the other side to narrow the value gap.";
+
+}
+
+}else{
+
+counter=
+"The trade is already relatively close. A counter should focus on roster fit rather than simply adding random value.";
+
+}
+
+
+/* render */
+
+const result=document.getElementById("result");
+
+result.style.display="block";
+
+
+const meterWidth=
+Math.max(
+5,
+Math.min(
+95,
+50+(difference*2)
+)
+);
+
+
+result.innerHTML=`
+
+<div class="verdict">
+
+<h2>${verdict}</h2>
+
+<div class="grade">
+${fairness}/100
+</div>
+
+<p>
+TradeCheck Fairness Score
+</p>
+
+<div class="meter">
+<div
+class="meter-bar"
+style="width:${meterWidth}%">
+</div>
+</div>
+
+<p>
+Value difference:
+<b>
+${difference>0?"+":""}${Math.round(difference)}
+</b>
+</p>
+
+</div>
+
+
+<div class="stat-grid">
+
+<div class="stat">
+
+<div class="stat-number">
+${Math.round(giveRaw)}
+</div>
+
+<div class="stat-label">
+You Give
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-number">
+${Math.round(receiveRaw)}
+</div>
+
+<div class="stat-label">
+You Receive
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-number">
+${Math.round(receiveAdjusted-giveAdjusted)}
+</div>
+
+<div class="stat-label">
+Context Gap
+</div>
+
+</div>
+
+</div>
+
+
+<hr>
+
+
+<h3>Trade Breakdown</h3>
+
+<div class="trade-columns">
+
+<div>
+
+<b>You Give</b>
+
+${give.map(function(name){
+
+const p=players[name];
+
+return `
+<div class="player-card">
+
+<div class="player-info">
+
+<div class="player-name">
+${titleCase(name)}
+</div>
+
+<div class="player-meta">
+${p.p} · Base ${Math.round(
+adjustedValue(
+name,
+scoring,
+teams,
+qbFormat,
+tePremium
+)
+)}
+</div>
+
+</div>
+
+</div>
+`;
+
+}).join("")}
+
+</div>
+
+
+<div>
+
+<b>You Receive</b>
+
+${receive.map(function(name){
+
+const p=players[name];
+
+return `
+<div class="player-card">
+
+<div class="player-info">
+
+<div class="player-name">
+${titleCase(name)}
+</div>
+
+<div class="player-meta">
+${p.p} · Base ${Math.round(
+adjustedValue(
+name,
+scoring,
+teams,
+qbFormat,
+tePremium
+)
+)}
+</div>
+
+</div>
+
+</div>
+`;
+
+}).join("")}
+
+</div>
+
+</div>
+
+
+<hr>
+
+
+<h3>🤖 TradeCheck AI Analysis</h3>
+
+${explanations.map(function(x){
+
+return `<div class="insight">${x}</div>`;
+
+}).join("")}
+
+
+<div class="insight">
+<b>Package structure:</b><br>
+${packageText}
+</div>
+
+
+<div class="insight">
+<b>Potential counter:</b><br>
+${counter}
+</div>
+
+
+<div class="insight">
+
+<b>League context:</b><br>
+
+${teams}-team ·
+${scoring.toUpperCase()} ·
+${qbFormat==="sf" ? "Superflex" : "1QB"} ·
+TE Premium ${tePremium}
+
+</div>
+
+
+<hr>
+
+
+<p class="small">
+
+<strong>Important:</strong>
+This is a model-based informational analysis.
+It does not guarantee player performance, trade acceptance,
+or a fantasy result. Actual roster construction, player news,
+injuries, projections and league-specific circumstances can
+change the value of a trade.
+
+</p>
+
+`;
+
+
+result.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+}
+
+
+/* =========================================================
+SWAP SIDES
+========================================================= */
+
+function swapSides(){
+
+const temp=give;
+
+give=receive;
+
+receive=temp;
+
+renderPlayers();
+
+}
+
+
+/* =========================================================
+LIVE SETTINGS UPDATE
+========================================================= */
+
+[
+"scoring",
+"teams",
+"qbFormat",
+"tePremium",
+"leagueType"
+].forEach(function(id){
+
+document.getElementById(id)
+.addEventListener(
+"change",
+updateTotals
+);
+
+});
+
+
+/* INITIAL */
+
+renderPlayers();
 
 </script>
 
