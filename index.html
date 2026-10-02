@@ -129,9 +129,16 @@ color:#666;
 
 <h3>You Give</h3>
 
-<textarea id="give"
-placeholder="Jonathan Taylor
-Mike Evans"></textarea>
+<input
+id="giveSearch"
+type="text"
+placeholder="Search for a player..."
+oninput="searchPlayers('give')"
+>
+
+<div id="giveSuggestions"></div>
+
+<div id="giveSelected"></div>
 
 <h3>You Receive</h3>
 
