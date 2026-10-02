@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TradeCheck AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;margin:0;background:#f3f4f6;color:#111}
+.container{max-width:800px;margin:auto;padding:25px}
+.box{background:white;padding:20px;border-radius:15px;margin:15px 0}
+textarea{width:100%;height:130px;margin:8px 0 18px;padding:12px;box-sizing:border-box;border:1px solid #ccc;border-radius:10px;font-size:16px}
+button{width:100%;padding:15px;background:#111;color:white;border:0;border-radius:10px;font-size:17px;font-weight:bold}
+.result{margin-top:20px;font-size:18px}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>TradeCheck AI 🏈</h1>
+<p>Fantasy football trade analyzer</p>
+
+<div class="box">
+
+<h3>You Give</h3>
+<textarea id="give" placeholder="Jonathan Taylor
+Mike Evans"></textarea>
+
+<h3>You Receive</h3>
+<textarea id="receive" placeholder="Nico Collins"></textarea>
+
+<button onclick="analyze()">ANALYZE TRADE</button>
+
+<div id="result" class="result"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const values = {
+
+"ceedee lamb":98,
+"ja'marr chase":99,
+"justin jefferson":97,
+"bijan robinson":98,
+"jahmyr gibbs":97,
+"amon-ra st. brown":94,
+"nico collins":91,
+"puka nacua":95,
+"malik nabers":91,
+"garrett wilson":89,
+"aj brown":92,
+"devonta smith":83,
+"tee higgins":84,
+"mike evans":78,
+"christian mccaffrey":92,
+"jonathan taylor":90,
+"saquon barkley":95,
+"derrick henry":82,
+"james cook":87,
+"ashton jeanty":90,
+"jaylen warren":76,
+"josh allen":96,
+"lamar jackson":94,
+"jalen hurts":94,
+"patrick mahomes":92,
+"trey mcbride":91,
+"brock bowers":91,
+"george kittle":82,
+"travis kelce":78,
+"harold fannin":70
+
+};
+
+function getValue(player){
+
+let name=player.toLowerCase().trim();
+
+return values[name] || 65;
+
+}
+
+function analyze(){
+
+let give=document.getElementById("give").value
+.split("\n")
+.map(x=>x.trim())
+.filter(x=>x);
+
+let receive=document.getElementById("receive").value
+.split("\n")
+.map(x=>x.trim())
+.filter(x=>x);
+
+if(give.length===0 || receive.length===0){
+
+document.getElementById("result").innerHTML=
+"<b>Please enter players on both sides.</b>";
+
+return;
+
+}
+
+let giveScore=0;
+let receiveScore=0;
+
+give.forEach(player=>{
+giveScore+=getValue(player);
+});
+
+receive.forEach(player=>{
+receiveScore+=getValue(player);
+});
+
+let difference=receiveScore-giveScore;
+
+let verdict;
+
+if(difference>=10){
+
+verdict="🔥 Strong value gain";
+
+}else if(difference>=4){
+
+verdict="✅ Value gain";
+
+}else if(difference>-4){
+
+verdict="⚖️ Very close trade";
+
+}else if(difference>-10){
+
+verdict="⚠️ Value loss";
+
+}else{
+
+verdict="❌ Strong value loss";
+
+}
+
+document.getElementById("result").innerHTML=
+
+"<hr>"+
+"<h2>"+verdict+"</h2>"+
+"<p><b>You give:</b> "+giveScore+" points</p>"+
+"<p><b>You receive:</b> "+receiveScore+" points</p>"+
+"<p><b>Difference:</b> "+(difference>0?"+":"")+difference+"</p>"+
+"<hr>"+
+"<p>This is the first prototype. Later versions will use live player data and your actual league settings.</p>";
+
+}
+
+</script>
+
+</body>
+</html>
