@@ -142,8 +142,16 @@ oninput="searchPlayers('give')"
 
 <h3>You Receive</h3>
 
-<textarea id="receive"
-placeholder="Nico Collins"></textarea>
+<input
+id="receiveSearch"
+type="text"
+placeholder="Search for a player..."
+oninput="searchPlayers('receive')"
+>
+
+<div id="receiveSuggestions"></div>
+
+<div id="receiveSelected"></div>
 
 <button onclick="analyze()">ANALYZE TRADE</button>
 
@@ -152,7 +160,84 @@ placeholder="Nico Collins"></textarea>
 </div>
 
 </div>
+let selectedGive = [];
+let selectedReceive = [];
 
+function searchPlayers(side){
+
+let input = document.getElementById(
+side === "give" ? "giveSearch" : "receiveSearch"
+);
+
+let suggestions = document.getElementById(
+side === "give" ? "giveSuggestions" : "receiveSuggestions"
+);
+
+let query = input.value.toLowerCase().trim();
+
+suggestions.innerHTML = "";
+
+if(query.length === 0) return;
+
+Object.keys(players)
+.filter(name => name.includes(query))
+.slice(0,8)
+.forEach(name => {
+
+let p = players[name];
+
+let button = document.createElement("button");
+
+button.style.marginTop = "5px";
+button.style.background = "#f3f4f6";
+button.style.color = "#111";
+button.style.textAlign = "left";
+
+button.innerHTML =
+name.replace(/\b\w/g,l=>l.toUpperCase()) +
+" — " + p.pos;
+
+button.onclick = function(){
+
+if(side === "give"){
+selectedGive.push(name);
+document.getElementById("giveSearch").value = "";
+}else{
+selectedReceive.push(name);
+document.getElementById("receiveSearch").value = "";
+}
+
+suggestions.innerHTML = "";
+
+updateSelectedPlayers();
+
+};
+
+suggestions.appendChild(button);
+
+});
+
+}
+
+function updateSelectedPlayers(){
+
+document.getElementById("giveSelected").innerHTML =
+selectedGive.map(name =>
+"<div class='player'><b>" +
+name.replace(/\b\w/g,l=>l.toUpperCase()) +
+"</b> — " + players[name].pos +
+"</div>"
+).join("");
+
+document.getElementById("receiveSelected").innerHTML =
+selectedReceive.map(name =>
+"<div class='player'><b>" +
+name.replace(/\b\w/g,l=>l.toUpperCase()) +
+"</b> — " + players[name].pos +
+"</div>"
+).join("");
+
+}
 <script>
 
 const players = {
@@ -314,13 +399,8 @@ return `
 
 function analyze(){
 
-let give=parsePlayers(
-document.getElementById("give").value
-);
-
-let receive=parsePlayers(
-document.getElementById("receive").value
-);
+let give = selectedGive;
+let receive = selectedReceive;
 
 let scoring=document.getElementById("scoring").value;
 
