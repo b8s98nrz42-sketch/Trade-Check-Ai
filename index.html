@@ -3,30 +3,140 @@
 <head>
 <title>TradeCheck AI</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-body{font-family:Arial;margin:0;background:#f3f4f6;color:#111}
-.container{max-width:800px;margin:auto;padding:25px}
-.box{background:white;padding:20px;border-radius:15px;margin:15px 0}
-textarea{width:100%;height:130px;margin:8px 0 18px;padding:12px;box-sizing:border-box;border:1px solid #ccc;border-radius:10px;font-size:16px}
-button{width:100%;padding:15px;background:#111;color:white;border:0;border-radius:10px;font-size:17px;font-weight:bold}
-.result{margin-top:20px;font-size:18px}
+body{
+font-family:Arial,sans-serif;
+margin:0;
+background:#f3f4f6;
+color:#111;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+margin-bottom:5px;
+}
+
+.subtitle{
+color:#555;
+margin-top:0;
+}
+
+.box{
+background:white;
+padding:20px;
+border-radius:15px;
+margin:15px 0;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-top:15px;
+margin-bottom:6px;
+}
+
+select,textarea{
+width:100%;
+box-sizing:border-box;
+padding:12px;
+border:1px solid #ccc;
+border-radius:10px;
+font-size:16px;
+}
+
+textarea{
+height:130px;
+resize:vertical;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+background:#111;
+color:white;
+border:0;
+border-radius:10px;
+font-size:17px;
+font-weight:bold;
+}
+
+button:active{
+transform:scale(.99);
+}
+
+.result{
+margin-top:20px;
+}
+
+.score{
+font-size:28px;
+font-weight:bold;
+}
+
+.good{
+font-weight:bold;
+}
+
+.warning{
+font-weight:bold;
+}
+
+.player{
+padding:6px 0;
+border-bottom:1px solid #eee;
+}
+
+small{
+color:#666;
+}
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <h1>TradeCheck AI 🏈</h1>
-<p>Fantasy football trade analyzer</p>
+<p class="subtitle">Fantasy football trade analyzer</p>
 
 <div class="box">
 
+<h3>League Settings</h3>
+
+<label>Scoring</label>
+
+<select id="scoring">
+<option value="ppr">PPR</option>
+<option value="half">Half-PPR</option>
+<option value="standard">Standard</option>
+</select>
+
+<label>League Size</label>
+
+<select id="teams">
+<option value="10">10 Team</option>
+<option value="12" selected>12 Team</option>
+<option value="14">14 Team</option>
+</select>
+
 <h3>You Give</h3>
-<textarea id="give" placeholder="Jonathan Taylor
+
+<textarea id="give"
+placeholder="Jonathan Taylor
 Mike Evans"></textarea>
 
 <h3>You Receive</h3>
-<textarea id="receive" placeholder="Nico Collins"></textarea>
+
+<textarea id="receive"
+placeholder="Nico Collins"></textarea>
 
 <button onclick="analyze()">ANALYZE TRADE</button>
 
@@ -38,116 +148,281 @@ Mike Evans"></textarea>
 
 <script>
 
-const values = {
+const players = {
 
-"ceedee lamb":98,
-"ja'marr chase":99,
-"justin jefferson":97,
-"bijan robinson":98,
-"jahmyr gibbs":97,
-"amon-ra st. brown":94,
-"nico collins":91,
-"puka nacua":95,
-"malik nabers":91,
-"garrett wilson":89,
-"aj brown":92,
-"devonta smith":83,
-"tee higgins":84,
-"mike evans":78,
-"christian mccaffrey":92,
-"jonathan taylor":90,
-"saquon barkley":95,
-"derrick henry":82,
-"james cook":87,
-"ashton jeanty":90,
-"jaylen warren":76,
-"josh allen":96,
-"lamar jackson":94,
-"jalen hurts":94,
-"patrick mahomes":92,
-"trey mcbride":91,
-"brock bowers":91,
-"george kittle":82,
-"travis kelce":78,
-"harold fannin":70
+"ceedee lamb":{value:98,pos:"WR"},
+"ja'marr chase":{value:99,pos:"WR"},
+"justin jefferson":{value:97,pos:"WR"},
+"bijan robinson":{value:98,pos:"RB"},
+"jahmyr gibbs":{value:97,pos:"RB"},
+"amon-ra st. brown":{value:94,pos:"WR"},
+"nico collins":{value:91,pos:"WR"},
+"puka nacua":{value:95,pos:"WR"},
+"malik nabers":{value:91,pos:"WR"},
+"garrett wilson":{value:89,pos:"WR"},
+"aj brown":{value:92,pos:"WR"},
+"devonta smith":{value:83,pos:"WR"},
+"tee higgins":{value:84,pos:"WR"},
+"mike evans":{value:78,pos:"WR"},
+"christian mccaffrey":{value:92,pos:"RB"},
+"jonathan taylor":{value:90,pos:"RB"},
+"saquon barkley":{value:95,pos:"RB"},
+"derrick henry":{value:82,pos:"RB"},
+"james cook":{value:87,pos:"RB"},
+"ashton jeanty":{value:90,pos:"RB"},
+"jaylen warren":{value:76,pos:"RB"},
+"breece hall":{value:88,pos:"RB"},
+"bijan robinson":{value:98,pos:"RB"},
+"de'von achane":{value:94,pos:"RB"},
+"james conner":{value:75,pos:"RB"},
+"josh jacobs":{value:84,pos:"RB"},
+"kenneth walker":{value:82,pos:"RB"},
+"chase brown":{value:80,pos:"RB"},
+"josh allen":{value:96,pos:"QB"},
+"lamar jackson":{value:94,pos:"QB"},
+"jalen hurts":{value:94,pos:"QB"},
+"patrick mahomes":{value:92,pos:"QB"},
+"joe burrow":{value:88,pos:"QB"},
+"trey mcbride":{value:91,pos:"TE"},
+"brock bowers":{value:91,pos:"TE"},
+"george kittle":{value:82,pos:"TE"},
+"travis kelce":{value:78,pos:"TE"},
+"sam laporta":{value:80,pos:"TE"},
+"harold fannin":{value:70,pos:"TE"},
+"george pickens":{value:84,pos:"WR"},
+"marvin harrison jr":{value:86,pos:"WR"},
+"rome odunze":{value:80,pos:"WR"},
+"drake london":{value:89,pos:"WR"},
+"brian thomas jr":{value:88,pos:"WR"},
+"jsn":{value:87,pos:"WR"},
+"jayden reed":{value:78,pos:"WR"},
+"ladd mcconkey":{value:80,pos:"WR"},
+"tetairoa mcmillan":{value:83,pos:"WR"},
+"devonta smith":{value:83,pos:"WR"},
+"chris olave":{value:87,pos:"WR"},
+"tyreek hill":{value:82,pos:"WR"},
+"dk metcalf":{value:81,pos:"WR"},
+"marvin mims":{value:65,pos:"WR"},
+"bucky irving":{value:79,pos:"RB"},
+"treveyon henderson":{value:82,pos:"RB"},
+"omarion hampton":{value:85,pos:"RB"},
+"alvin kamara":{value:79,pos:"RB"},
+"derrick henry":{value:82,pos:"RB"},
+"bo nix":{value:78,pos:"QB"},
+"jayden daniels":{value:86,pos:"QB"},
+"caleb williams":{value:80,pos:"QB"},
+"cj stroud":{value:79,pos:"QB"},
+"baker mayfield":{value:75,pos:"QB"},
+"bryce young":{value:68,pos:"QB"},
+"dalton kincaid":{value:76,pos:"TE"},
+"tj hockenson":{value:75,pos:"TE"},
+"evan engram":{value:72,pos:"TE"},
+"mark andrews":{value:76,pos:"TE"}
 
 };
 
-function getValue(player){
+function getPlayer(name){
 
-let name=player.toLowerCase().trim();
+let key=name.toLowerCase().trim();
 
-return values[name] || 65;
+if(players[key]){
+return players[key];
+}
+
+return {
+value:65,
+pos:"Unknown"
+};
+
+}
+
+function parsePlayers(text){
+
+return text
+.split("\n")
+.map(x=>x.trim())
+.filter(x=>x.length>0);
+
+}
+
+function calculateScore(list,scoring,teams){
+
+let total=0;
+
+list.forEach(name=>{
+
+let player=getPlayer(name);
+
+let value=player.value;
+
+if(scoring==="ppr" && player.pos==="WR"){
+value+=2;
+}
+
+if(scoring==="ppr" && player.pos==="RB"){
+value+=1;
+}
+
+if(scoring==="standard" && player.pos==="WR"){
+value-=2;
+}
+
+if(scoring==="standard" && player.pos==="RB"){
+value-=1;
+}
+
+if(teams==="10"){
+value-=2;
+}
+
+if(teams==="14"){
+value+=3;
+}
+
+total+=value;
+
+});
+
+return total;
+
+}
+
+function playerList(list){
+
+return list.map(name=>{
+
+let p=getPlayer(name);
+
+return `
+<div class="player">
+<b>${name}</b> — ${p.pos}
+<br>
+<small>Trade value: ${p.value}</small>
+</div>
+`;
+
+}).join("");
 
 }
 
 function analyze(){
 
-let give=document.getElementById("give").value
-.split("\n")
-.map(x=>x.trim())
-.filter(x=>x);
+let give=parsePlayers(
+document.getElementById("give").value
+);
 
-let receive=document.getElementById("receive").value
-.split("\n")
-.map(x=>x.trim())
-.filter(x=>x);
+let receive=parsePlayers(
+document.getElementById("receive").value
+);
+
+let scoring=document.getElementById("scoring").value;
+
+let teams=document.getElementById("teams").value;
+
+let result=document.getElementById("result");
 
 if(give.length===0 || receive.length===0){
 
-document.getElementById("result").innerHTML=
-"<b>Please enter players on both sides.</b>";
+result.innerHTML=
+"<b>Please enter at least one player on both sides.</b>";
 
 return;
 
 }
 
-let giveScore=0;
-let receiveScore=0;
+let giveScore=calculateScore(give,scoring,teams);
 
-give.forEach(player=>{
-giveScore+=getValue(player);
-});
-
-receive.forEach(player=>{
-receiveScore+=getValue(player);
-});
+let receiveScore=calculateScore(receive,scoring,teams);
 
 let difference=receiveScore-giveScore;
 
 let verdict;
 
-if(difference>=10){
+if(difference>=15){
+
+verdict="🔥 Major value gain";
+
+}else if(difference>=7){
 
 verdict="🔥 Strong value gain";
 
-}else if(difference>=4){
+}else if(difference>=3){
 
-verdict="✅ Value gain";
+verdict="✅ Slight value gain";
 
-}else if(difference>-4){
+}else if(difference>-3){
 
 verdict="⚖️ Very close trade";
 
-}else if(difference>-10){
+}else if(difference>-7){
 
-verdict="⚠️ Value loss";
+verdict="⚠️ Slight value loss";
+
+}else if(difference>-15){
+
+verdict="⚠️ Significant value loss";
 
 }else{
 
-verdict="❌ Strong value loss";
+verdict="❌ Major value loss";
 
 }
 
-document.getElementById("result").innerHTML=
+let explanation="";
 
-"<hr>"+
-"<h2>"+verdict+"</h2>"+
-"<p><b>You give:</b> "+giveScore+" points</p>"+
-"<p><b>You receive:</b> "+receiveScore+" points</p>"+
-"<p><b>Difference:</b> "+(difference>0?"+":"")+difference+"</p>"+
-"<hr>"+
-"<p>This is the first prototype. Later versions will use live player data and your actual league settings.</p>";
+if(difference>=7){
+
+explanation=
+"The players you receive have more overall trade value than the players you give up.";
+
+}else if(difference<=-7){
+
+explanation=
+"The players you give up have more overall trade value than the players you receive.";
+
+}else{
+
+explanation=
+"The overall player values are relatively close.";
+
+}
+
+result.innerHTML=`
+
+<hr>
+
+<h2>${verdict}</h2>
+
+<p>${explanation}</p>
+
+<p class="score">${difference>0?"+":""}${difference}</p>
+
+<p>
+<b>You give:</b> ${giveScore} points
+</p>
+
+${playerList(give)}
+
+<p>
+<b>You receive:</b> ${receiveScore} points
+</p>
+
+${playerList(receive)}
+
+<hr>
+
+<p>
+<b>Scoring:</b> ${scoring.toUpperCase()}
+<br>
+<b>League:</b> ${teams}-team
+</p>
+
+<small>
+TradeCheck AI is an early prototype. Player values are estimates and
+should not be treated as guaranteed fantasy outcomes.
+</small>
+
+`;
 
 }
 
