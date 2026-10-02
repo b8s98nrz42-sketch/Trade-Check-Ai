@@ -402,97 +402,78 @@ function analyze(){
 let give = selectedGive;
 let receive = selectedReceive;
 
-let scoring=document.getElementById("scoring").value;
+let scoring = document.getElementById("scoring").value;
+let teams = document.getElementById("teams").value;
 
-let teams=document.getElementById("teams").value;
+let result = document.getElementById("result");
 
-let result=document.getElementById("result");
+if(give.length === 0 || receive.length === 0){
 
-if(give.length===0 || receive.length===0){
-
-result.innerHTML=
-"<b>Please enter at least one player on both sides.</b>";
+result.innerHTML =
+"<b>Please select at least one player on both sides.</b>";
 
 return;
 
 }
 
-let giveScore=calculateScore(give,scoring,teams);
+let giveScore = calculateScore(give, scoring, teams);
+let receiveScore = calculateScore(receive, scoring, teams);
 
-let receiveScore=calculateScore(receive,scoring,teams);
-
-let difference=receiveScore-giveScore;
+let difference = receiveScore - giveScore;
 
 let verdict;
 
-if(difference>=15){
-
-verdict="🔥 Major value gain";
-
-}else if(difference>=7){
-
-verdict="🔥 Strong value gain";
-
-}else if(difference>=3){
-
-verdict="✅ Slight value gain";
-
-}else if(difference>-3){
-
-verdict="⚖️ Very close trade";
-
-}else if(difference>-7){
-
-verdict="⚠️ Slight value loss";
-
-}else if(difference>-15){
-
-verdict="⚠️ Significant value loss";
-
-}else{
-
-verdict="❌ Major value loss";
-
+if(difference >= 15){
+verdict = "🔥 Major value gain";
+}
+else if(difference >= 7){
+verdict = "🔥 Strong value gain";
+}
+else if(difference >= 3){
+verdict = "✅ Slight value gain";
+}
+else if(difference > -3){
+verdict = "⚖️ Very close trade";
+}
+else if(difference > -7){
+verdict = "⚠️ Slight value loss";
+}
+else if(difference > -15){
+verdict = "⚠️ Significant value loss";
+}
+else{
+verdict = "❌ Major value loss";
 }
 
-let explanation="";
+let explanation;
 
-if(difference>=7){
-
-explanation=
+if(difference >= 7){
+explanation =
 "The players you receive have more overall trade value than the players you give up.";
-
-}else if(difference<=-7){
-
-explanation=
+}
+else if(difference <= -7){
+explanation =
 "The players you give up have more overall trade value than the players you receive.";
-
-}else{
-
-explanation=
+}
+else{
+explanation =
 "The overall player values are relatively close.";
-
 }
 
-result.innerHTML=`
-
+result.innerHTML = `
 <hr>
 
 <h2>${verdict}</h2>
 
 <p>${explanation}</p>
 
-<p class="score">${difference>0?"+":""}${difference}</p>
+<p class="score">${difference > 0 ? "+" : ""}${difference}</p>
 
-<p>
-<b>You give:</b> ${giveScore} points
-</p>
+<p><b>You give:</b> ${giveScore} points</p>
 
 ${playerList(give)}
 
-<p>
-<b>You receive:</b> ${receiveScore} points
-</p>
+<p><b>You receive:</b> ${receiveScore} points</p>
 
 ${playerList(receive)}
 
@@ -505,10 +486,8 @@ ${playerList(receive)}
 </p>
 
 <small>
-TradeCheck AI is an early prototype. Player values are estimates and
-should not be treated as guaranteed fantasy outcomes.
+TradeCheck AI is an early prototype. Player values are estimates.
 </small>
-
 `;
 
 }
