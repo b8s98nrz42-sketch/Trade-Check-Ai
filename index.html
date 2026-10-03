@@ -3,180 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080b14">
-<title>TradeCheck AI</title>
+<meta name="theme-color" content="#111827">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>TradeCheck AI</title>
 
 <style>
 :root{
-  --bg:#070a12;
-  --bg2:#0d1220;
-  --card:#111827;
-  --card2:#151d2e;
-  --line:#263149;
-  --text:#f8fafc;
-  --muted:#94a3b8;
-  --accent:#7c5cff;
-  --accent2:#00d4ff;
-  --green:#22c55e;
-  --red:#ef4444;
-  --yellow:#facc15;
-  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --bg:#f3f4f6;
+  --card:#ffffff;
+  --txt:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --soft:#f9fafb;
+  --accent:#111827;
+  --good:#166534;
+  --bad:#991b1b;
 }
 
 *{
   box-sizing:border-box;
 }
 
-html{
-  scroll-behavior:smooth;
-}
-
 body{
   margin:0;
-  min-height:100vh;
-  font-family:Inter,Arial,sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 10% 0%,rgba(124,92,255,.20),transparent 30%),
-    radial-gradient(circle at 90% 10%,rgba(0,212,255,.12),transparent 25%),
-    linear-gradient(145deg,#05070d,#0b1020 50%,#060912);
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--txt);
 }
 
-body.light{
-  --bg:#f4f7fb;
-  --bg2:#ffffff;
-  --card:#ffffff;
-  --card2:#f8fafc;
-  --line:#dce3ee;
-  --text:#101827;
-  --muted:#64748b;
-  --shadow:0 15px 40px rgba(15,23,42,.10);
-  background:#f4f7fb;
+body.dark{
+  --bg:#0b1220;
+  --card:#111827;
+  --txt:#f9fafb;
+  --muted:#9ca3af;
+  --line:#273449;
+  --soft:#172033;
+  --accent:#f9fafb;
 }
 
-*{
-  scrollbar-width:thin;
-  scrollbar-color:#334155 transparent;
-}
-
-.container{
-  width:min(1100px,100%);
+.wrap{
+  max-width:1050px;
   margin:auto;
-  padding:18px;
+  padding:14px;
 }
 
-/* ---------- HEADER ---------- */
-
-.hero{
-  position:relative;
-  overflow:hidden;
-  border:1px solid rgba(124,92,255,.25);
-  background:
-    linear-gradient(135deg,
-      rgba(124,92,255,.16),
-      rgba(0,212,255,.06) 50%,
-      rgba(17,24,39,.8));
-  border-radius:28px;
-  padding:28px 22px;
-  margin-bottom:16px;
-  box-shadow:var(--shadow);
-}
-
-.hero:before{
-  content:"";
-  position:absolute;
-  width:260px;
-  height:260px;
-  right:-100px;
-  top:-130px;
-  background:rgba(124,92,255,.18);
-  filter:blur(30px);
-  border-radius:50%;
-}
-
-.brand{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.logo{
-  width:58px;
-  height:58px;
-  border-radius:18px;
-  display:grid;
-  place-items:center;
-  font-size:29px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  box-shadow:0 10px 30px rgba(124,92,255,.35);
-}
-
-.hero h1{
-  margin:0;
-  font-size:32px;
-  letter-spacing:-1px;
-}
-
-.hero p{
-  margin:5px 0 0;
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* ---------- TABS ---------- */
-
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:4px;
-  margin-bottom:16px;
-  background:rgba(15,23,42,.65);
+.card{
+  background:var(--card);
   border:1px solid var(--line);
   border-radius:18px;
-  backdrop-filter:blur(12px);
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 3px 14px #0000000b;
+}
+
+header{
+  text-align:center;
+  padding:12px 0 18px;
+}
+
+h1{
+  margin:0;
+  font-size:34px;
+}
+
+h2,h3{
+  margin-top:0;
+}
+
+.muted,
+.small{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+label{
+  display:block;
+  font-weight:800;
+  font-size:13px;
+  margin:0 0 6px;
+}
+
+select,
+input{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:var(--card);
+  color:var(--txt);
+  font-size:15px;
+}
+
+button{
+  border:0;
+  border-radius:11px;
+  padding:11px 14px;
+  font-weight:800;
+  background:var(--soft);
+  color:var(--txt);
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.88;
+}
+
+button.primary{
+  width:100%;
+  background:#111827;
+  color:white;
+  font-size:18px;
+  padding:16px;
+  margin-top:12px;
+}
+
+body.dark button.primary{
+  background:#f9fafb;
+  color:#111827;
+}
+
+.tabs,
+.actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.tabs{
+  overflow:auto;
+  margin-bottom:15px;
 }
 
 .tab{
-  flex:1;
-  min-width:125px;
-  padding:12px 15px;
-  border:0;
-  border-radius:13px;
-  background:transparent;
-  color:var(--muted);
-  font-weight:800;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.tab:hover{
-  color:var(--text);
-  background:rgba(124,92,255,.10);
+  white-space:nowrap;
 }
 
 .tab.active{
+  background:#111827;
   color:white;
-  background:linear-gradient(135deg,var(--accent),#5b4bea);
-  box-shadow:0 8px 20px rgba(124,92,255,.28);
 }
 
-/* ---------- CARDS ---------- */
-
-.card{
-  background:linear-gradient(145deg,rgba(17,24,39,.96),rgba(13,18,32,.96));
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:20px;
-  margin-bottom:16px;
-  box-shadow:var(--shadow);
-}
-
-body.light .card{
-  background:white;
+body.dark .tab.active{
+  background:#f9fafb;
+  color:#111827;
 }
 
 .panel{
@@ -187,1034 +163,959 @@ body.light .card{
   display:block;
 }
 
-.section-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:18px;
-}
-
-.section-title h2{
-  margin:0;
-  font-size:20px;
-}
-
-.section-title span{
-  color:var(--muted);
-  font-size:12px;
-}
-
-/* ---------- SETTINGS ---------- */
-
-.grid{
+.trade{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
 }
 
-.field label{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-  margin-bottom:7px;
-}
-
-select,
-input{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:var(--card2);
-  color:var(--text);
-  padding:13px;
-  font-size:14px;
-  outline:none;
-  transition:.2s;
-}
-
-select:focus,
-input:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(124,92,255,.13);
-}
-
-.divider{
-  height:1px;
-  background:var(--line);
-  margin:22px 0;
-}
-
-/* ---------- BUTTONS ---------- */
-
-button{
-  font-family:inherit;
-}
-
-.btn{
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:11px 15px;
-  background:var(--card2);
-  color:var(--text);
-  font-weight:800;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:translateY(-1px);
-  border-color:#475569;
-}
-
-.btn-primary{
-  border:0;
-  color:white;
-  background:linear-gradient(135deg,var(--accent),#5c48e8);
-  box-shadow:0 10px 25px rgba(124,92,255,.28);
-}
-
-.btn-primary:hover{
-  box-shadow:0 14px 30px rgba(124,92,255,.38);
-}
-
-.btn-danger{
-  color:#fecaca;
-  background:rgba(239,68,68,.10);
-  border-color:rgba(239,68,68,.25);
-}
-
-.btn-full{
-  width:100%;
-  padding:17px;
-  font-size:17px;
-  margin-top:16px;
-}
-
-/* ---------- TRADE BUILDER ---------- */
-
-.trade-grid{
-  display:grid;
-  grid-template-columns:1fr 80px 1fr;
-  align-items:center;
-  gap:15px;
-}
-
-.side{
-  border:1px solid var(--line);
-  border-radius:19px;
-  padding:17px;
-  background:rgba(15,23,42,.45);
-}
-
-.side-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-}
-
-.side-title h3{
-  margin:0;
-  font-size:16px;
-}
-
-.side-title span{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.swap-box{
-  display:grid;
-  place-items:center;
-}
-
-.swap{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  border:1px solid var(--line);
-  background:linear-gradient(135deg,var(--card2),#202a40);
-  color:white;
-  font-size:21px;
-  cursor:pointer;
-  transition:.25s;
-}
-
-.swap:hover{
-  transform:rotate(180deg);
-  border-color:var(--accent);
+.search{
+  position:relative;
 }
 
 .suggestions{
-  margin-top:5px;
-  position:relative;
-  z-index:10;
+  margin-top:4px;
 }
 
 .suggestion{
-  width:100%;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  width:100%;
+  margin:4px 0;
   text-align:left;
   border:1px solid var(--line);
-  border-radius:11px;
-  padding:11px;
-  margin:5px 0;
-  color:var(--text);
-  background:#111827;
-  cursor:pointer;
-}
-
-.suggestion:hover{
-  border-color:var(--accent);
-  background:#182038;
 }
 
 .player{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
-  padding:12px;
-  margin-top:8px;
+  gap:8px;
+  align-items:center;
+  padding:10px;
+  margin-top:7px;
+  background:var(--soft);
   border:1px solid var(--line);
-  border-radius:13px;
-  background:rgba(15,23,42,.65);
+  border-radius:11px;
 }
 
-.player-info{
-  min-width:0;
+.name{
+  font-weight:800;
 }
 
-.player-name{
-  font-weight:900;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.player-meta{
+.meta{
+  font-size:12px;
   color:var(--muted);
-  font-size:11px;
   margin-top:3px;
 }
 
 .badge{
-  display:inline-block;
+  font-size:11px;
+  background:var(--line);
   padding:3px 7px;
-  margin-left:4px;
   border-radius:99px;
-  background:rgba(124,92,255,.14);
-  color:#c4b5fd;
-  font-size:10px;
-  font-weight:900;
 }
 
 .remove{
-  flex-shrink:0;
-  border:0;
-  border-radius:9px;
+  background:#fee2e2;
+  color:#991b1b;
   padding:7px 9px;
-  background:rgba(239,68,68,.12);
-  color:#fca5a5;
   font-size:11px;
-  font-weight:900;
-  cursor:pointer;
 }
 
 .total{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  margin-top:14px;
-  padding-top:12px;
-  border-top:1px solid var(--line);
-}
-
-.total-label{
-  color:var(--muted);
-  font-size:11px;
-  text-transform:uppercase;
+  font-size:24px;
   font-weight:900;
+  margin-top:10px;
 }
-
-.total-value{
-  font-size:27px;
-  font-weight:950;
-  background:linear-gradient(90deg,#fff,#a78bfa);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-/* ---------- ANALYSIS ---------- */
 
 .result{
   display:none;
 }
 
 .verdict{
-  position:relative;
-  overflow:hidden;
   text-align:center;
-  padding:27px 18px;
-  border-radius:20px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(124,92,255,.22),transparent 55%),
-    rgba(15,23,42,.7);
-  border:1px solid rgba(124,92,255,.22);
+  background:var(--soft);
+  padding:18px;
+  border-radius:15px;
 }
 
-.verdict h2{
-  margin:0 0 10px;
-  font-size:20px;
-}
-
-.score{
-  font-size:56px;
-  line-height:1;
-  font-weight:950;
-  letter-spacing:-3px;
-}
-
-.score-sub{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:7px;
+.grade{
+  font-size:42px;
+  font-weight:900;
 }
 
 .meter{
   height:12px;
-  border-radius:99px;
-  background:#202a3d;
+  background:var(--line);
+  border-radius:20px;
   overflow:hidden;
-  margin:18px auto 12px;
-  max-width:650px;
+  margin:12px 0;
 }
 
-.meter-bar{
+.bar{
   height:100%;
-  border-radius:99px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  box-shadow:0 0 18px rgba(124,92,255,.5);
+  background:#111827;
+}
+
+body.dark .bar{
+  background:#f9fafb;
 }
 
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:9px;
-  margin-top:13px;
+  margin-top:12px;
 }
 
 .stat{
-  padding:14px 8px;
-  border:1px solid var(--line);
-  border-radius:14px;
+  background:var(--soft);
+  padding:12px;
+  border-radius:12px;
   text-align:center;
-  background:rgba(15,23,42,.5);
 }
 
 .stat b{
   display:block;
-  font-size:21px;
-}
-
-.stat span{
-  color:var(--muted);
-  font-size:10px;
-  text-transform:uppercase;
-  font-weight:800;
+  font-size:22px;
 }
 
 .insight{
-  padding:13px;
+  background:var(--soft);
+  border-left:4px solid var(--accent);
+  padding:12px;
+  border-radius:8px;
   margin-top:9px;
-  border-radius:13px;
-  border:1px solid var(--line);
-  border-left:3px solid var(--accent);
-  background:rgba(124,92,255,.05);
   line-height:1.5;
-  font-size:13px;
 }
 
-/* ---------- ROSTER ---------- */
-
-.roster-list{
-  margin-top:12px;
+.roster{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
 
-.empty{
-  color:var(--muted);
-  text-align:center;
-  padding:25px 10px;
+.danger{
+  background:#fee2e2;
+  color:#991b1b;
 }
 
-/* ---------- HISTORY ---------- */
-
-.history-item{
-  padding:15px;
-  margin-top:9px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:rgba(15,23,42,.5);
+.hidden{
+  display:none!important;
 }
 
-.history-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
+hr{
+  border:0;
+  border-top:1px solid var(--line);
+  margin:20px 0;
 }
 
-.history-date{
-  color:var(--muted);
-  font-size:11px;
-}
+@media(max-width:700px){
 
-.history-players{
-  margin-top:8px;
-  font-weight:800;
-}
-
-/* ---------- ACCOUNT ---------- */
-
-.account-box{
-  padding:17px;
-  border:1px solid rgba(124,92,255,.25);
-  border-radius:17px;
-  background:linear-gradient(135deg,rgba(124,92,255,.08),rgba(0,212,255,.03));
-}
-
-.account-status{
-  padding:13px;
-  border-radius:13px;
-  background:rgba(34,197,94,.08);
-  border:1px solid rgba(34,197,94,.2);
-}
-
-/* ---------- FOOTER ---------- */
-
-.footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:11px;
-  padding:10px 0 25px;
-}
-
-/* ---------- MOBILE ---------- */
-
-@media(max-width:760px){
-
-  .container{
-    padding:10px;
-  }
-
-  .hero{
-    border-radius:21px;
-    padding:21px 17px;
-  }
-
-  .hero h1{
-    font-size:26px;
-  }
-
-  .logo{
-    width:50px;
-    height:50px;
-    font-size:24px;
-  }
-
-  .grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .trade-grid{
+  .grid,
+  .trade,
+  .roster{
     grid-template-columns:1fr;
-  }
-
-  .swap-box{
-    order:2;
-  }
-
-  .swap{
-    transform:rotate(90deg);
-  }
-
-  .swap:hover{
-    transform:rotate(270deg);
   }
 
   .stats{
     grid-template-columns:1fr 1fr;
   }
 
-  .card{
-    padding:15px;
-    border-radius:18px;
+  h1{
+    font-size:28px;
   }
 
-  .tabs{
-    border-radius:15px;
-  }
-
-  .tab{
-    min-width:115px;
-  }
-}
-
-@media(max-width:480px){
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .hero{
-    margin-bottom:10px;
-  }
-
-  .score{
-    font-size:48px;
-  }
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
-<div class="container">
+<div class="wrap">
 
-  <!-- HERO -->
-  <header class="hero">
-    <div class="brand">
-      <div class="logo">🏈</div>
-      <div>
-        <h1>TradeCheck AI</h1>
-        <p>Know your trade before you accept it.</p>
-      </div>
-    </div>
-  </header>
+<header>
+<h1>TradeCheck AI 🏈</h1>
+<p class="muted">
+League-aware fantasy football trade analysis
+</p>
+</header>
 
-  <!-- NAV -->
-  <nav class="tabs">
-    <button class="tab active" data-tab="trade">⚡ Trade Analyzer</button>
-    <button class="tab" data-tab="roster">👥 My Roster</button>
-    <button class="tab" data-tab="history">📊 History</button>
-    <button class="tab" data-tab="account">☁️ Account</button>
-    <button class="tab" data-tab="settings">⚙️ Settings</button>
-  </nav>
+<div class="card">
 
-  <!-- TRADE -->
-  <section id="trade" class="panel active">
+<div class="tabs">
 
-    <div class="card">
+<button class="tab active" data-tab="trade">
+Trade Analyzer
+</button>
 
-      <div class="section-title">
-        <h2>League Settings</h2>
-        <span>Customize your league</span>
-      </div>
+<button class="tab" data-tab="roster">
+My Roster
+</button>
 
-      <div class="grid">
+<button class="tab" data-tab="history">
+History
+</button>
 
-        <div class="field">
-          <label>League Type</label>
-          <select id="type">
-            <option value="redraft">Redraft</option>
-            <option value="keeper">Keeper</option>
-            <option value="dynasty">Dynasty</option>
-          </select>
-        </div>
+<button class="tab" data-tab="account">
+Account
+</button>
 
-        <div class="field">
-          <label>Scoring</label>
-          <select id="scoring">
-            <option value="ppr">PPR</option>
-            <option value="half">Half-PPR</option>
-            <option value="std">Standard</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>QB Format</label>
-          <select id="qb">
-            <option value="1">1 QB</option>
-            <option value="sf">Superflex</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Teams</label>
-          <select id="teams">
-            <option>8</option>
-            <option>10</option>
-            <option selected>12</option>
-            <option>14</option>
-            <option>16</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>TE Premium</label>
-          <select id="te">
-            <option value="0">No</option>
-            <option value=".5">+0.5</option>
-            <option value="1">+1.0</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Package Logic</label>
-          <select id="pkg">
-            <option value="1">On</option>
-            <option value="0">Off</option>
-          </select>
-        </div>
-
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="section-title">
-        <h2>Roster Needs</h2>
-        <span>Adjust for your team</span>
-      </div>
-
-      <div class="grid">
-
-        <div class="field">
-          <label>QB</label>
-          <select id="needQB">
-            <option value="0">Good</option>
-            <option value="2">Need</option>
-            <option value="4">Desperate</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>RB</label>
-          <select id="needRB">
-            <option value="0">Good</option>
-            <option value="2">Need</option>
-            <option value="4">Desperate</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>WR</label>
-          <select id="needWR">
-            <option value="0">Good</option>
-            <option value="2">Need</option>
-            <option value="4">Desperate</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>TE</label>
-          <select id="needTE">
-            <option value="0">Good</option>
-            <option value="2">Need</option>
-            <option value="4">Desperate</option>
-          </select>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- TRADE BUILDER -->
-
-    <div class="card">
-
-      <div class="section-title">
-        <h2>Build Your Trade</h2>
-        <span>Up to 6 players per side</span>
-      </div>
-
-      <div class="trade-grid">
-
-        <div class="side">
-
-          <div class="side-title">
-            <h3>You Give</h3>
-            <span>OUTGOING</span>
-          </div>
-
-          <input id="give" placeholder="Search player...">
-
-          <div id="gs" class="suggestions"></div>
-
-          <div id="gl"></div>
-
-          <div class="total">
-            <span class="total-label">Trade Value</span>
-            <span class="total-value" id="gt">0</span>
-          </div>
-
-        </div>
-
-        <div class="swap-box">
-          <button class="swap" id="swap">⇄</button>
-        </div>
-
-        <div class="side">
-
-          <div class="side-title">
-            <h3>You Receive</h3>
-            <span>INCOMING</span>
-          </div>
-
-          <input id="recv" placeholder="Search player...">
-
-          <div id="rs" class="suggestions"></div>
-
-          <div id="rl"></div>
-
-          <div class="total">
-            <span class="total-label">Trade Value</span>
-            <span class="total-value" id="rt">0</span>
-          </div>
-
-        </div>
-
-      </div>
-
-      <button class="btn btn-primary btn-full" id="analyze">
-        ⚡ ANALYZE TRADE
-      </button>
-
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button class="btn" id="clear" style="flex:1">
-          Clear Trade
-        </button>
-      </div>
-
-      <p class="muted" style="margin-top:13px">
-        TradeCheck AI uses league settings, player values, package logic,
-        positional scarcity and roster context.
-      </p>
-
-    </div>
-
-  </section>
-
-  <!-- RESULT -->
-
-  <section id="result" class="card result"></section>
-
-  <!-- ROSTER -->
-
-  <section id="roster" class="panel">
-
-    <div class="card">
-
-      <div class="section-title">
-        <h2>My Roster</h2>
-        <span>Improve roster-fit analysis</span>
-      </div>
-
-      <input
-        id="rosterSearch"
-        placeholder="Search player to add..."
-      >
-
-      <div id="rSug" class="suggestions"></div>
-
-      <div id="rosterList" class="roster-list"></div>
-
-    </div>
-
-  </section>
-
-  <!-- HISTORY -->
-
-  <section id="history" class="panel">
-
-    <div class="card">
-
-      <div class="section-title">
-        <h2>Trade History</h2>
-        <span>Your saved trades</span>
-      </div>
-
-      <div style="display:flex;gap:8px">
-        <button class="btn" id="export">Export</button>
-        <button class="btn btn-danger" id="clearHist">
-          Clear History
-        </button>
-      </div>
-
-      <div id="hist"></div>
-
-    </div>
-
-  </section>
-
-  <!-- ACCOUNT -->
-
-  <section id="account" class="panel">
-
-    <div class="card">
-
-      <div class="section-title">
-        <h2>☁️ TradeCheck Account</h2>
-        <span>Cloud trade history</span>
-      </div>
-
-      <div class="account-box">
-
-        <p class="muted">
-          Create an account to keep your trades across devices.
-        </p>
-
-        <div id="authLoggedOut">
-
-          <div class="field">
-            <label>Email</label>
-            <input
-              id="authEmail"
-              type="email"
-              autocomplete="email"
-              placeholder="you@example.com"
-            >
-          </div>
-
-          <div class="field" style="margin-top:12px">
-            <label>Password</label>
-            <input
-              id="authPassword"
-              type="password"
-              autocomplete="current-password"
-              placeholder="At least 6 characters"
-            >
-          </div>
-
-          <div style="display:flex;gap:8px;margin-top:13px">
-            <button class="btn btn-primary" id="signUp" style="flex:1">
-              Create Account
-            </button>
-
-            <button class="btn" id="signIn" style="flex:1">
-              Log In
-            </button>
-          </div>
-
-          <p id="authMsg" class="muted"></p>
-
-        </div>
-
-        <div id="authLoggedIn" class="hidden">
-
-          <div class="account-status">
-            <b>✓ Cloud account connected</b>
-            <div class="muted" style="margin-top:5px">
-              <span id="userEmail"></span>
-            </div>
-          </div>
-
-          <div style="display:flex;gap:8px;margin-top:13px">
-
-            <button class="btn btn-primary" id="syncNow" style="flex:1">
-              Sync Trades
-            </button>
-
-            <button class="btn" id="signOut" style="flex:1">
-              Sign Out
-            </button>
-
-          </div>
-
-          <p id="syncMsg" class="muted"></p>
-
-        </div>
-
-      </div>
-
-      <div class="divider"></div>
-
-      <h3>Cloud Setup</h3>
-
-      <p class="muted">
-        Connect Supabase by entering your project URL and public anon key
-        in the JavaScript configuration. Never place a service-role key
-        in this website.
-      </p>
-
-    </div>
-
-  </section>
-
-  <!-- SETTINGS -->
-
-  <section id="settings" class="panel">
-
-    <div class="card">
-
-      <div class="section-title">
-        <h2>App Settings</h2>
-        <span>Customize TradeCheck</span>
-      </div>
-
-      <button class="btn" id="dark">
-        🌙 Toggle Dark / Light
-      </button>
-
-      <button class="btn btn-danger" id="reset" style="margin-left:7px">
-        Reset Local Data
-      </button>
-
-      <div class="divider"></div>
-
-      <h3>TradeCheck AI</h3>
-
-      <p class="muted">
-        Built to expand into a full fantasy-football platform with
-        accounts, live player data, projections, advanced roster analysis,
-        premium features and mobile apps.
-      </p>
-
-    </div>
-
-  </section>
-
-  <div class="footer">
-    TradeCheck AI • Informational fantasy-football analysis
-  </div>
+<button class="tab" data-tab="settings">
+Settings
+</button>
 
 </div>
+
+
+<!-- ================= TRADE ANALYZER ================= -->
+
+<section id="trade" class="panel active">
+
+<h2>League Settings</h2>
+
+<div class="grid">
+
+<div>
+<label>League</label>
+
+<select id="type">
+
+<option value="redraft">
+Redraft
+</option>
+
+<option value="keeper">
+Keeper
+</option>
+
+<option value="dynasty">
+Dynasty
+</option>
+
+</select>
+</div>
+
+
+<div>
+<label>Scoring</label>
+
+<select id="scoring">
+
+<option value="ppr">
+PPR
+</option>
+
+<option value="half">
+Half-PPR
+</option>
+
+<option value="std">
+Standard
+</option>
+
+</select>
+</div>
+
+
+<div>
+<label>QB Format</label>
+
+<select id="qb">
+
+<option value="1">
+1 QB
+</option>
+
+<option value="sf">
+Superflex
+</option>
+
+</select>
+</div>
+
+
+<div>
+<label>Teams</label>
+
+<select id="teams">
+
+<option>8</option>
+<option>10</option>
+<option selected>12</option>
+<option>14</option>
+<option>16</option>
+
+</select>
+</div>
+
+
+<div>
+<label>TE Premium</label>
+
+<select id="te">
+
+<option value="0">
+No
+</option>
+
+<option value=".5">
++0.5
+</option>
+
+<option value="1">
++1.0
+</option>
+
+</select>
+</div>
+
+
+<div>
+<label>Package Logic</label>
+
+<select id="pkg">
+
+<option value="1">
+On
+</option>
+
+<option value="0">
+Off
+</option>
+
+</select>
+</div>
+
+</div>
+
+
+<hr>
+
+<h3>Roster Needs</h3>
+
+<div class="grid">
+
+<div>
+
+<label>QB</label>
+
+<select id="needQB">
+
+<option value="0">Good</option>
+<option value="2">Need</option>
+<option value="4">Desperate</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>RB</label>
+
+<select id="needRB">
+
+<option value="0">Good</option>
+<option value="2">Need</option>
+<option value="4">Desperate</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>WR</label>
+
+<select id="needWR">
+
+<option value="0">Good</option>
+<option value="2">Need</option>
+<option value="4">Desperate</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>TE</label>
+
+<select id="needTE">
+
+<option value="0">Good</option>
+<option value="2">Need</option>
+<option value="4">Desperate</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<hr>
+
+<h2>Build Your Trade</h2>
+
+<div class="trade">
+
+
+<!-- GIVE -->
+
+<div>
+
+<h3>You Give</h3>
+
+<input
+id="give"
+placeholder="Search player..."
+>
+
+<div
+id="gs"
+class="suggestions">
+</div>
+
+<div id="gl">
+</div>
+
+<div class="total">
+Value:
+<span id="gt">0</span>
+</div>
+
+</div>
+
+
+<!-- RECEIVE -->
+
+<div>
+
+<h3>You Receive</h3>
+
+<input
+id="recv"
+placeholder="Search player..."
+>
+
+<div
+id="rs"
+class="suggestions">
+</div>
+
+<div id="rl">
+</div>
+
+<div class="total">
+Value:
+<span id="rt">0</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div
+class="actions"
+style="margin-top:14px"
+>
+
+<button id="swap">
+⇄ Swap
+</button>
+
+<button id="clear">
+Clear
+</button>
+
+</div>
+
+
+<button
+class="primary"
+id="analyze"
+>
+ANALYZE TRADE
+</button>
+
+
+<p class="small">
+Values are estimates. League settings and roster context affect the result.
+</p>
+
+</section>
+
+
+<!-- ================= ROSTER ================= -->
+
+<section
+id="roster"
+class="panel"
+>
+
+<h2>My Roster</h2>
+
+<p class="small">
+Add your players for better roster-fit analysis.
+Data is saved locally on this device.
+</p>
+
+<input
+id="rosterSearch"
+placeholder="Search player to add..."
+>
+
+<div
+id="rSug"
+class="suggestions">
+</div>
+
+<div id="rosterList">
+</div>
+
+</section>
+
+
+<!-- ================= HISTORY ================= -->
+
+<section
+id="history"
+class="panel"
+>
+
+<h2>Saved Trades</h2>
+
+<div class="actions">
+
+<button id="export">
+Export
+</button>
+
+<button
+id="clearHist"
+class="danger"
+>
+Clear History
+</button>
+
+</div>
+
+<div id="hist">
+</div>
+
+</section>
+
+
+<!-- ================= ACCOUNT ================= -->
+
+<section
+id="account"
+class="panel"
+>
+
+<h2>Account</h2>
+
+<p class="small">
+
+Create an account to keep your TradeCheck AI trades
+in the cloud and access them on another device.
+
+</p>
+
+
+<div id="authLoggedOut">
+
+<label>Email</label>
+
+<input
+id="authEmail"
+type="email"
+autocomplete="email"
+placeholder="you@example.com"
+>
+
+
+<label style="margin-top:10px">
+Password
+</label>
+
+<input
+id="authPassword"
+type="password"
+autocomplete="current-password"
+placeholder="At least 6 characters"
+>
+
+
+<div
+class="actions"
+style="margin-top:12px"
+>
+
+<button id="signUp">
+Create Account
+</button>
+
+<button id="signIn">
+Log In
+</button>
+
+</div>
+
+<p
+id="authMsg"
+class="small">
+</p>
+
+</div>
+
+
+<div
+id="authLoggedIn"
+class="hidden"
+>
+
+<div class="insight">
+
+<b>
+Signed in as:
+</b>
+
+<span id="userEmail">
+</span>
+
+</div>
+
+
+<div
+class="actions"
+style="margin-top:12px"
+>
+
+<button id="syncNow">
+Sync My Trades
+</button>
+
+<button id="signOut">
+Sign Out
+</button>
+
+</div>
+
+<p
+id="syncMsg"
+class="small">
+</p>
+
+</div>
+
+
+<hr>
+
+<h3>
+Cloud setup
+</h3>
+
+<p class="small">
+
+The app is ready for Supabase cloud accounts.
+
+Add your Supabase project URL and anon key in the
+configuration near the top of the JavaScript.
+
+Never put a Supabase service-role key in this file.
+
+</p>
+
+</section>
+
+
+<!-- ================= SETTINGS ================= -->
+
+<section
+id="settings"
+class="panel"
+>
+
+<h2>
+App Settings
+</h2>
+
+<button id="dark">
+Toggle Dark Mode
+</button>
+
+<button
+id="reset"
+class="danger"
+>
+Reset Local Data
+</button>
+
+
+<hr>
+
+<h3>
+Built for expansion
+</h3>
+
+<p class="small">
+
+This version separates the trade engine, UI,
+roster storage and history so a future backend/live-data
+layer can be added without rebuilding the whole interface.
+
+</p>
+
+</section>
+
+</div>
+
+
+<!-- ================= RESULT ================= -->
+
+<div
+id="result"
+class="card result">
+</div>
+
+
+<div class="card">
+
+<b>
+TradeCheck AI
+</b>
+
+<p class="small">
+
+Informational fantasy-football analysis.
+
+Model values can become outdated and do not guarantee
+player performance or trade results.
+
+</p>
+
+</div>
+
+</div>
+
 
 <script>
 
 /* =========================================================
-   SUPABASE
-========================================================= */
+   TRADECHECK AI
+   SUPABASE CONFIGURATION
+   ========================================================= */
+
 
 const SUPABASE_URL =
 "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
 
+
 const SUPABASE_ANON_KEY =
 "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+
 
 const CLOUD_ENABLED =
 SUPABASE_URL.startsWith("https://") &&
 SUPABASE_ANON_KEY.length > 20;
 
+
 const supabaseClient =
 CLOUD_ENABLED
-? window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  )
-: null;
+?
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+)
+:
+null;
+
 
 let currentUser = null;
 
 
 /* =========================================================
    PLAYER DATABASE
-========================================================= */
+   ========================================================= */
 
 const P = {
 
 "ceedee lamb":[98,"WR",27],
+
 "ja'marr chase":[99,"WR",26],
+
 "justin jefferson":[97,"WR",27],
+
 "bijan robinson":[98,"RB",24],
+
 "jahmyr gibbs":[97,"RB",24],
+
 "amon-ra st. brown":[94,"WR",26],
+
 "nico collins":[91,"WR",27],
+
 "puka nacua":[95,"WR",25],
+
 "malik nabers":[91,"WR",23],
+
 "garrett wilson":[89,"WR",26],
+
 "a.j. brown":[92,"WR",29],
+
 "devonta smith":[83,"WR",27],
+
 "tee higgins":[84,"WR",27],
+
 "mike evans":[78,"WR",33],
 
 "christian mccaffrey":[92,"RB",30],
+
 "jonathan taylor":[90,"RB",27],
+
 "saquon barkley":[95,"RB",29],
+
 "derrick henry":[82,"RB",32],
+
 "james cook":[87,"RB",27],
+
 "ashton jeanty":[90,"RB",22],
+
 "jaylen warren":[76,"RB",27],
+
 "breece hall":[88,"RB",25],
+
 "de'von achane":[94,"RB",24],
+
 "james conner":[75,"RB",31],
+
 "josh jacobs":[84,"RB",28],
+
 "kenneth walker":[82,"RB",25],
+
 "chase brown":[80,"RB",26],
+
 "bucky irving":[79,"RB",24],
+
 "treveyon henderson":[82,"RB",23],
+
 "omarion hampton":[85,"RB",23],
+
 "alvin kamara":[79,"RB",31],
 
 "josh allen":[96,"QB",30],
+
 "lamar jackson":[94,"QB",29],
+
 "jalen hurts":[94,"QB",28],
+
 "patrick mahomes":[92,"QB",31],
+
 "joe burrow":[88,"QB",29],
+
 "jayden daniels":[86,"QB",25],
+
 "caleb williams":[80,"QB",25],
+
 "cj stroud":[79,"QB",25],
+
 "bo nix":[78,"QB",26],
+
 "baker mayfield":[75,"QB",31],
-"drake maye":[82,"QB",24],
-"kyler murray":[78,"QB",29],
-"jordan love":[79,"QB",28],
-"trevor lawrence":[77,"QB",27],
 
 "trey mcbride":[91,"TE",26],
+
 "brock bowers":[91,"TE",25],
+
 "george kittle":[82,"TE",33],
+
 "travis kelce":[78,"TE",36],
+
 "sam laporta":[80,"TE",26],
+
 "harold fannin":[70,"TE",22],
+
 "dalton kincaid":[76,"TE",27],
+
 "tj hockenson":[75,"TE",29],
+
 "evan engram":[72,"TE",31],
+
 "mark andrews":[76,"TE",31],
-"tucker kraft":[73,"TE",25],
-"cole kmet":[67,"TE",27],
-"jake ferguson":[70,"TE",27],
-"pat freiermuth":[69,"TE",27],
 
 "george pickens":[84,"WR",25],
+
 "marvin harrison jr":[86,"WR",24],
+
 "rome odunze":[80,"WR",23],
+
 "drake london":[89,"WR",25],
+
 "brian thomas jr":[88,"WR",24],
+
 "jsn":[87,"WR",24],
+
 "jayden reed":[78,"WR",26],
+
 "ladd mcconkey":[80,"WR",25],
+
 "tetairoa mcmillan":[83,"WR",23],
+
 "chris olave":[87,"WR",26],
+
 "tyreek hill":[82,"WR",32],
+
 "dk metcalf":[81,"WR",29],
-"marvin mims":[65,"WR",24]
+
+"marvin mims":[65,"WR",24],
+
+"drake maye":[82,"QB",24],
+
+"kyler murray":[78,"QB",29],
+
+"jordan love":[79,"QB",28],
+
+"trevor lawrence":[77,"QB",27],
+
+"tucker kraft":[73,"TE",25],
+
+"cole kmet":[67,"TE",27],
+
+"jake ferguson":[70,"TE",27],
+
+"pat freiermuth":[69,"TE",27]
 
 };
 
 
 /* =========================================================
-   APP STATE
-========================================================= */
+   STATE
+   ========================================================= */
 
 let G = [];
 let R = [];
 
-function $(id){
-  return document.getElementById(id);
-}
 
 function safeJSON(key,fallback){
 
   try{
 
-    const value =
-      JSON.parse(localStorage.getItem(key) || "");
+    const x =
+    JSON.parse(
+      localStorage.getItem(key) || ""
+    );
 
-    return value ?? fallback;
+    return x ?? fallback;
 
   }catch(e){
 
@@ -1224,24 +1125,35 @@ function safeJSON(key,fallback){
 
 }
 
+
 let MY =
-safeJSON("tc_myroster",[])
-.filter(n=>P[n]);
+safeJSON(
+  "tc_myroster",
+  []
+).filter(
+  n => P[n]
+);
 
 
-function nm(x){
+/* =========================================================
+   HELPERS
+   ========================================================= */
 
-  return x.replace(
-    /\b\w/g,
-    c=>c.toUpperCase()
-  );
+const $ =
+x => document.getElementById(x);
 
-}
+
+const nm =
+x =>
+x.replace(
+  /\b\w/g,
+  c => c.toUpperCase()
+);
 
 
 /* =========================================================
    LEAGUE SETTINGS
-========================================================= */
+   ========================================================= */
 
 function S(){
 
@@ -1257,7 +1169,7 @@ function S(){
 
     te:+$("te").value,
 
-    pkg:$("pkg").value==="1"
+    pkg:$("pkg").value === "1"
 
   };
 
@@ -1265,32 +1177,44 @@ function S(){
 
 
 /* =========================================================
-   VALUE ENGINE
-========================================================= */
+   SCORING ADJUSTMENT
+   ========================================================= */
 
 function scoringAdj(pos,sc){
 
-  if(sc==="ppr"){
+  if(sc === "ppr"){
 
-    if(pos==="WR") return 2;
-    if(pos==="RB") return 1;
-    if(pos==="TE") return 2;
+    if(pos === "WR") return 2;
 
-  }
+    if(pos === "RB") return 1;
 
-  if(sc==="half"){
+    if(pos === "TE") return 2;
 
-    if(pos==="WR") return 1;
-    if(pos==="RB") return .5;
-    if(pos==="TE") return 1;
+    return 0;
 
   }
 
-  if(sc==="std"){
 
-    if(pos==="WR") return -2;
-    if(pos==="RB") return -1;
-    if(pos==="TE") return -2;
+  if(sc === "half"){
+
+    if(pos === "WR") return 1;
+
+    if(pos === "RB") return .5;
+
+    if(pos === "TE") return 1;
+
+    return 0;
+
+  }
+
+
+  if(sc === "std"){
+
+    if(pos === "WR") return -2;
+
+    if(pos === "RB") return -1;
+
+    if(pos === "TE") return -2;
 
   }
 
@@ -1299,84 +1223,120 @@ function scoringAdj(pos,sc){
 }
 
 
+/* =========================================================
+   POSITIONAL SCARCITY
+   ========================================================= */
+
 function scarcityAdj(pos,teams,qb){
 
-  const scale={
+  const scale = {
+
     QB:0,
     RB:0,
     WR:0,
     TE:0
+
   };
 
-  if(teams>=14){
 
-    scale.RB=2;
-    scale.WR=2;
-    scale.TE=1;
+  if(teams >= 14){
 
-  }
-
-  if(teams<=8){
-
-    scale.RB=-2;
-    scale.WR=-2;
-    scale.TE=-1;
+    scale.RB = 2;
+    scale.WR = 2;
+    scale.TE = 1;
 
   }
 
-  if(qb==="sf" && pos==="QB")
+
+  else if(teams <= 8){
+
+    scale.RB = -2;
+    scale.WR = -2;
+    scale.TE = -1;
+
+  }
+
+
+  if(qb === "sf" && pos === "QB"){
+
     return 12;
+
+  }
+
 
   return scale[pos] || 0;
 
 }
 
 
+/* =========================================================
+   AGE ADJUSTMENT
+   ========================================================= */
+
 function ageAdj(age,type){
 
-  if(type==="dynasty"){
+  if(type === "dynasty"){
 
-    if(age<=23) return 6;
-    if(age<=25) return 4;
-    if(age<=27) return 1;
-    if(age>=31) return -6;
-    if(age>=29) return -3;
+    if(age <= 23) return 6;
+
+    if(age <= 25) return 4;
+
+    if(age <= 27) return 1;
+
+    if(age >= 31) return -6;
+
+    if(age >= 29) return -3;
+
+  }
+
+
+  if(type === "keeper"){
+
+    if(age <= 24) return 3;
+
+    if(age <= 27) return 1;
+
+    if(age >= 31) return -4;
+
+    if(age >= 29) return -2;
 
   }
 
-  if(type==="keeper"){
-
-    if(age<=24) return 3;
-    if(age<=27) return 1;
-    if(age>=31) return -4;
-    if(age>=29) return -2;
-
-  }
 
   return 0;
 
 }
 
 
-function val(name){
+/* =========================================================
+   PLAYER VALUE
+   ========================================================= */
 
-  const d=P[name];
+function val(n){
+
+  const d = P[n];
 
   if(!d) return 0;
+
 
   const [
     base,
     pos,
     age
-  ]=d;
+  ] = d;
 
-  const s=S();
+
+  const s = S();
+
 
   return (
 
     base +
 
-    scoringAdj(pos,s.sc) +
+    scoringAdj(
+      pos,
+      s.sc
+    ) +
 
     scarcityAdj(
       pos,
@@ -1390,9 +1350,11 @@ function val(name){
     ) +
 
     (
-      pos==="TE"
-      ? s.te*3
-      : 0
+      pos === "TE"
+      ?
+      s.te * 3
+      :
+      0
     )
 
   );
@@ -1401,131 +1363,225 @@ function val(name){
 
 
 /* =========================================================
-   ROSTER ENGINE
-========================================================= */
+   SELECTED PLAYERS
+   ========================================================= */
+
+function selectedNames(){
+
+  return new Set([
+    ...G,
+    ...R
+  ]);
+
+}
+
+
+/* =========================================================
+   ROSTER COUNTS
+   ========================================================= */
 
 function rosterCounts(){
 
-  const c={
+  const c = {
+
     QB:0,
     RB:0,
     WR:0,
     TE:0
+
   };
 
-  MY.forEach(n=>{
 
-    if(P[n])
+  MY.forEach(n => {
+
+    if(P[n]){
+
       c[P[n][1]]++;
 
+    }
+
   });
+
 
   return c;
 
 }
 
 
+/* =========================================================
+   ROSTER NEED
+   ========================================================= */
+
 function needBonus(pos){
 
   const explicit =
-    +$("need"+pos).value;
+  +$("need" + pos).value;
+
 
   const c =
-    rosterCounts();
+  rosterCounts();
 
-  const starters={
+
+  const starters = {
+
     QB:1,
     RB:2,
     WR:2,
     TE:1
+
   };
 
-  const depth =
-    Math.max(
-      0,
-      (starters[pos]||1)-c[pos]
-    );
 
-  return explicit + depth*2;
+  let depth =
+  Math.max(
+    0,
+    (starters[pos] || 1) -
+    c[pos]
+  );
+
+
+  return (
+    explicit +
+    depth * 2
+  );
 
 }
 
 
 /* =========================================================
-   PACKAGE LOGIC
-========================================================= */
+   PACKAGE PENALTY
+   ========================================================= */
+
+function packagePenalty(a){
+
+  if(
+    !S().pkg ||
+    a.length < 2
+  ){
+
+    return 0;
+
+  }
+
+
+  const total =
+  raw(a);
+
+
+  if(a.length === 2){
+
+    return Math.min(
+      4,
+      total * .035
+    );
+
+  }
+
+
+  if(a.length === 3){
+
+    return Math.min(
+      8,
+      total * .06
+    );
+
+  }
+
+
+  if(a.length >= 4){
+
+    return Math.min(
+      12,
+      total * .08
+    );
+
+  }
+
+
+  return 0;
+
+}
+
+
+/* =========================================================
+   RAW VALUE
+   ========================================================= */
 
 function raw(a){
 
   return a.reduce(
-    (total,name)=>
-      total+val(name),
+    (x,n) =>
+    x + val(n),
     0
   );
 
 }
 
 
-function packagePenalty(a){
-
-  if(
-    !S().pkg ||
-    a.length<2
-  )
-    return 0;
-
-  const total=raw(a);
-
-  if(a.length===2)
-    return Math.min(
-      4,
-      total*.035
-    );
-
-  if(a.length===3)
-    return Math.min(
-      8,
-      total*.06
-    );
-
-  return Math.min(
-    12,
-    total*.08
-  );
-
-}
-
+/* =========================================================
+   ROSTER IMPACT
+   ========================================================= */
 
 function rosterImpact(
   a,
   receiving
 ){
 
-  let impact=0;
+  let impact = 0;
 
-  for(const n of a){
 
-    const pos=P[n][1];
+  for(
+    const n of a
+  ){
 
-    const bonus=
-      needBonus(pos);
+    const pos =
+    P[n][1];
+
+
+    const bonus =
+    needBonus(pos);
+
 
     impact +=
-      (receiving ? 1 : -1)
-      *bonus;
+    (
+      receiving
+      ?
+      1
+      :
+      -1
+    ) * bonus;
 
-    if(receiving && MY.includes(n))
-      impact-=3;
 
-    if(!receiving && MY.includes(n))
-      impact-=4;
+    if(
+      receiving &&
+      MY.includes(n)
+    ){
+
+      impact -= 3;
+
+    }
+
+
+    if(
+      !receiving &&
+      MY.includes(n)
+    ){
+
+      impact -= 4;
+
+    }
 
   }
+
 
   return impact;
 
 }
 
+
+/* =========================================================
+   ADJUSTED VALUE
+   ========================================================= */
 
 function adjusted(
   a,
@@ -1549,276 +1605,19 @@ function adjusted(
 
 
 /* =========================================================
-   RENDER TRADE
-========================================================= */
+   RENDER
+   ========================================================= */
 
 function render(){
 
-  draw("g",G);
-  draw("r",R);
-  drawRoster();
-
-}
-
-
-function draw(side,a){
-
-  const box=
-    $(side==="g"
-      ? "gl"
-      : "rl");
-
-  const total=
-    $(side==="g"
-      ? "gt"
-      : "rt");
-
-  if(!a.length){
-
-    box.innerHTML=
-      `<div class="empty">
-        No players selected.
-      </div>`;
-
-  }else{
-
-    box.innerHTML=
-      a.map(n=>`
-
-        <div class="player">
-
-          <div class="player-info">
-
-            <div class="player-name">
-              ${nm(n)}
-              <span class="badge">
-                ${P[n][1]}
-              </span>
-            </div>
-
-            <div class="player-meta">
-              Model ${Math.round(val(n))}
-              • Age ${P[n][2]}
-            </div>
-
-          </div>
-
-          <button
-            class="remove"
-            onclick='rem("${side}","${n}")'>
-            Remove
-          </button>
-
-        </div>
-
-      `).join("");
-
-  }
-
-  total.textContent=
-    Math.round(raw(a));
-
-}
-
-
-function rem(side,name){
-
-  if(side==="g")
-    G=G.filter(x=>x!==name);
-  else
-    R=R.filter(x=>x!==name);
-
-  render();
-
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-function search(
-  id,
-  box,
-  side
-){
-
-  const q=
-    $(id).value
-      .toLowerCase()
-      .trim();
-
-  const b=$(box);
-
-  b.innerHTML="";
-
-  if(!q)
-    return;
-
-  const chosen=
-    side==="g"
-    ? G
-    : side==="r"
-    ? R
-    : MY;
-
-  Object.keys(P)
-
-    .filter(n=>
-      n.includes(q) &&
-      !chosen.includes(n) &&
-      !G.includes(n) &&
-      !R.includes(n)
-    )
-
-    .slice(0,10)
-
-    .forEach(n=>{
-
-      const button=
-        document.createElement("button");
-
-      button.className="suggestion";
-
-      button.innerHTML=`
-
-        <span>
-
-          <b>${nm(n)}</b>
-
-          <br>
-
-          <span class="muted">
-            ${P[n][1]}
-            • Age ${P[n][2]}
-          </span>
-
-        </span>
-
-        <b>
-          ${Math.round(val(n))}
-        </b>
-
-      `;
-
-      button.onclick=()=>{
-
-        if(side==="m"){
-
-          if(MY.length>=30){
-
-            alert(
-              "Roster limit reached."
-            );
-
-            return;
-
-          }
-
-          MY.push(n);
-
-          localStorage.setItem(
-            "tc_myroster",
-            JSON.stringify(MY)
-          );
-
-          drawRoster();
-
-        }else{
-
-          const a=
-            side==="g"
-            ? G
-            : R;
-
-          if(a.length>=6){
-
-            alert(
-              "Maximum 6 players per side."
-            );
-
-            return;
-
-          }
-
-          a.push(n);
-
-          render();
-
-        }
-
-        $(id).value="";
-        b.innerHTML="";
-
-      };
-
-      b.appendChild(button);
-
-    });
-
-}
-
-
-/* =========================================================
-   ROSTER
-========================================================= */
-
-function drawRoster(){
-
-  const box=$("rosterList");
-
-  if(!MY.length){
-
-    box.innerHTML=
-      `<div class="empty">
-        Add your players to improve roster-fit analysis.
-      </div>`;
-
-    return;
-
-  }
-
-  box.innerHTML=
-    MY.map(n=>`
-
-      <div class="player">
-
-        <div class="player-info">
-
-          <div class="player-name">
-            ${nm(n)}
-            <span class="badge">
-              ${P[n][1]}
-            </span>
-          </div>
-
-          <div class="player-meta">
-            Model ${Math.round(val(n))}
-          </div>
-
-        </div>
-
-        <button
-          class="remove"
-          onclick='removeRoster("${n}")'>
-          Remove
-        </button>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-function removeRoster(name){
-
-  MY=
-    MY.filter(x=>x!==name);
-
-  localStorage.setItem(
-    "tc_myroster",
-    JSON.stringify(MY)
+  draw(
+    "g",
+    G
+  );
+
+  draw(
+    "r",
+    R
   );
 
   drawRoster();
@@ -1827,14 +1626,387 @@ function removeRoster(name){
 
 
 /* =========================================================
-   ANALYZE
-========================================================= */
+   DRAW TRADE SIDE
+   ========================================================= */
+
+function draw(
+  side,
+  a
+){
+
+  const box =
+  $(
+    side === "g"
+    ?
+    "gl"
+    :
+    "rl"
+  );
+
+
+  const tot =
+  $(
+    side === "g"
+    ?
+    "gt"
+    :
+    "rt"
+  );
+
+
+  box.innerHTML =
+  a.length
+
+  ?
+
+  a.map(n => `
+
+    <div class="player">
+
+      <div>
+
+        <div class="name">
+
+          ${nm(n)}
+
+          <span class="badge">
+            ${P[n][1]}
+          </span>
+
+        </div>
+
+        <div class="meta">
+
+          Model ${Math.round(val(n))}
+          • age ${P[n][2]}
+
+        </div>
+
+      </div>
+
+      <button
+        class="remove"
+        onclick="rem('${side}',${JSON.stringify(n)})"
+      >
+
+        Remove
+
+      </button>
+
+    </div>
+
+  `).join("")
+
+  :
+
+  '<div class="small">No players selected.</div>';
+
+
+  tot.textContent =
+  Math.round(
+    raw(a)
+  );
+
+}
+
+
+/* =========================================================
+   REMOVE PLAYER FROM TRADE
+   ========================================================= */
+
+function rem(
+  s,
+  n
+){
+
+  if(s === "g"){
+
+    G =
+    G.filter(
+      x => x !== n
+    );
+
+  }
+
+  else{
+
+    R =
+    R.filter(
+      x => x !== n
+    );
+
+  }
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function search(
+  id,
+  box,
+  side
+){
+
+  const q =
+  $(id)
+  .value
+  .toLowerCase()
+  .trim();
+
+
+  const b =
+  $(box);
+
+
+  const chosen =
+  side === "g"
+  ?
+  G
+  :
+  side === "r"
+  ?
+  R
+  :
+  MY;
+
+
+  b.innerHTML = "";
+
+
+  if(!q)
+    return;
+
+
+  Object.keys(P)
+
+  .filter(
+    n =>
+    n.includes(q) &&
+    !chosen.includes(n) &&
+    !selectedNames().has(n)
+  )
+
+  .slice(0,10)
+
+  .forEach(n => {
+
+    const x =
+    document.createElement(
+      "button"
+    );
+
+
+    x.className =
+    "suggestion";
+
+
+    x.innerHTML = `
+
+      <span>
+
+        <b>
+          ${nm(n)}
+        </b>
+
+        <br>
+
+        <span class="small">
+
+          ${P[n][1]}
+          • age ${P[n][2]}
+
+        </span>
+
+      </span>
+
+      <b>
+        ${Math.round(val(n))}
+      </b>
+
+    `;
+
+
+    x.onclick = () => {
+
+      if(side === "m"){
+
+        if(MY.length >= 30){
+
+          alert(
+            "Roster limit reached."
+          );
+
+          return;
+
+        }
+
+
+        MY.push(n);
+
+
+        localStorage.setItem(
+          "tc_myroster",
+          JSON.stringify(MY)
+        );
+
+
+        drawRoster();
+
+        $(id).value = "";
+
+        b.innerHTML = "";
+
+        return;
+
+      }
+
+
+      const a =
+      side === "g"
+      ?
+      G
+      :
+      R;
+
+
+      if(a.length >= 6){
+
+        alert(
+          "Maximum 6 players per side."
+        );
+
+        return;
+
+      }
+
+
+      if(
+        G.includes(n) ||
+        R.includes(n)
+      ){
+
+        alert(
+          "A player cannot be on both sides of the same trade."
+        );
+
+        return;
+
+      }
+
+
+      a.push(n);
+
+
+      render();
+
+
+      $(id).value = "";
+
+      b.innerHTML = "";
+
+    };
+
+
+    b.appendChild(x);
+
+  });
+
+}
+
+
+/* =========================================================
+   ROSTER DISPLAY
+   ========================================================= */
+
+function drawRoster(){
+
+  $("rosterList").innerHTML =
+
+  MY.length
+
+  ?
+
+  MY.map(n => `
+
+    <div class="player">
+
+      <div>
+
+        <b>
+          ${nm(n)}
+        </b>
+
+        <div class="meta">
+
+          ${P[n][1]}
+          • model
+          ${Math.round(val(n))}
+
+        </div>
+
+      </div>
+
+      <button
+        class="remove"
+        onclick="removeRoster(${JSON.stringify(n)})"
+      >
+
+        Remove
+
+      </button>
+
+    </div>
+
+  `).join("")
+
+  :
+
+  "<p class='small'>No roster players added.</p>";
+
+}
+
+
+/* =========================================================
+   REMOVE ROSTER PLAYER
+   ========================================================= */
+
+function removeRoster(n){
+
+  MY =
+  MY.filter(
+    x => x !== n
+  );
+
+
+  localStorage.setItem(
+    "tc_myroster",
+    JSON.stringify(MY)
+  );
+
+
+  drawRoster();
+
+}
+
+
+/* =========================================================
+   ANALYZE TRADE
+   ========================================================= */
 
 function analyze(){
 
   try{
 
-    if(!G.length || !R.length){
+    if(
+      !G.length ||
+      !R.length
+    ){
 
       alert(
         "Select at least one player on both sides."
@@ -1844,134 +2016,186 @@ function analyze(){
 
     }
 
-    const gv=raw(G);
-    const rv=raw(R);
 
-    const ga=
-      adjusted(G,false);
+    const gv =
+    raw(G);
 
-    const ra=
-      adjusted(R,true);
 
-    const gap=
-      ra-ga;
+    const rv =
+    raw(R);
 
-    const score=
-      Math.max(
-        0,
-        Math.min(
-          100,
-          Math.round(
-            50+gap*2
-          )
+
+    const ga =
+    adjusted(
+      G,
+      false
+    );
+
+
+    const ra =
+    adjusted(
+      R,
+      true
+    );
+
+
+    const gap =
+    ra - ga;
+
+
+    const score =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(
+          50 + gap * 2
         )
-      );
+      )
+    );
+
 
     let label;
 
-    if(gap>=12)
-      label=
-        "Strong value difference toward you";
 
-    else if(gap>=5)
-      label=
-        "Moderate value difference toward you";
+    if(gap >= 12){
 
-    else if(gap>-5)
-      label=
-        "Close trade";
+      label =
+      "Strong value difference toward you";
 
-    else if(gap>-12)
-      label=
-        "Moderate value difference away from you";
+    }
 
-    else
-      label=
-        "Strong value difference away from you";
+    else if(gap >= 5){
+
+      label =
+      "Moderate value difference toward you";
+
+    }
+
+    else if(gap > -5){
+
+      label =
+      "Close trade";
+
+    }
+
+    else if(gap > -12){
+
+      label =
+      "Moderate value difference away from you";
+
+    }
+
+    else{
+
+      label =
+      "Strong value difference away from you";
+
+    }
 
 
-    const notes=[];
+    const notes = [];
+
 
     notes.push(
-      `Base player value:
-       You give ${Math.round(gv)}
-       vs receive ${Math.round(rv)}.`
+      `Base player value: you give ${Math.round(gv)}
+      vs receive ${Math.round(rv)}.`
     );
 
-    if(G.length!==R.length){
+
+    if(
+      G.length !== R.length
+    ){
 
       notes.push(
-        `Package adjustment:
-         ${G.length} outgoing player(s)
-         vs ${R.length} incoming player(s).`
+        `Package adjustment: ${G.length}
+        outgoing vs ${R.length} incoming;
+        smaller packages receive a modest
+        concentration adjustment.`
       );
 
     }
+
 
     if(MY.length){
 
       notes.push(
-        `Roster context:
-         ${MY.length} players loaded.
-         Positional depth affects the result.`
+        `Roster context uses your saved roster:
+        ${MY.length} players loaded.
+        Positional depth changes the adjustment.`
       );
 
     }
 
-    if(S().qb==="sf"){
+
+    if(
+      S().qb === "sf"
+    ){
 
       notes.push(
-        "Superflex is enabled, so quarterback scarcity receives an additional adjustment."
+        "Superflex is enabled; quarterback values receive a larger scarcity adjustment."
       );
 
     }
 
-    if(S().type!=="redraft"){
+
+    if(
+      S().type !== "redraft"
+    ){
 
       notes.push(
-        `${nm(S().type)} mode applies player age and future-value adjustments.`
+        `${nm(S().type)} mode applies age/runway adjustments.`
       );
 
     }
 
 
-    const width=
-      Math.max(
-        5,
-        Math.min(
-          95,
-          50+gap*2
-        )
-      );
+    const breakdown =
+
+      `Give adjusted: ${Math.round(ga)}
+      • Receive adjusted: ${Math.round(ra)}
+      • Gap: ${gap > 0 ? "+" : ""}${Math.round(gap)}`;
 
 
-    $("result").style.display="block";
+    $("result").style.display =
+    "block";
 
-    $("result").innerHTML=`
+
+    $("result").innerHTML = `
 
       <div class="verdict">
 
-        <h2>${label}</h2>
+        <h2>
+          ${label}
+        </h2>
 
-        <div class="score">
-          ${score}
+        <div class="grade">
+          ${score}/100
         </div>
 
-        <div class="score-sub">
-          TRADECHECK MODEL SCORE
+        <div class="small">
+          Model fairness score
         </div>
+
 
         <div class="meter">
+
           <div
-            class="meter-bar"
-            style="width:${width}%">
-          </div>
+            class="bar"
+            style="width:${Math.max(
+              5,
+              Math.min(
+                95,
+                50 + gap * 2
+              )
+            )}%"
+          ></div>
+
         </div>
 
+
         <b>
-          Give ${Math.round(ga)}
-          • Receive ${Math.round(ra)}
-          • Gap ${gap>0?"+":""}${Math.round(gap)}
+          ${breakdown}
         </b>
 
       </div>
@@ -1980,47 +2204,85 @@ function analyze(){
       <div class="stats">
 
         <div class="stat">
-          <b>${Math.round(gv)}</b>
-          <span>Base Give</span>
+
+          <b>
+            ${Math.round(gv)}
+          </b>
+
+          <span class="small">
+            Base Give
+          </span>
+
         </div>
 
-        <div class="stat">
-          <b>${Math.round(rv)}</b>
-          <span>Base Receive</span>
-        </div>
 
         <div class="stat">
-          <b>${Math.round(ga)}</b>
-          <span>Adjusted Give</span>
+
+          <b>
+            ${Math.round(rv)}
+          </b>
+
+          <span class="small">
+            Base Receive
+          </span>
+
         </div>
 
+
         <div class="stat">
-          <b>${Math.round(ra)}</b>
-          <span>Adjusted Receive</span>
+
+          <b>
+            ${Math.round(ga)}
+          </b>
+
+          <span class="small">
+            Adjusted Give
+          </span>
+
+        </div>
+
+
+        <div class="stat">
+
+          <b>
+            ${Math.round(ra)}
+          </b>
+
+          <span class="small">
+            Adjusted Receive
+          </span>
+
         </div>
 
       </div>
 
 
-      <div class="divider"></div>
+      <hr>
 
-      <h3>Why the model got this result</h3>
 
-      ${notes.map(x=>`
-        <div class="insight">
-          ${x}
-        </div>
-      `).join("")}
+      <h3>
+        Why the model got this result
+      </h3>
+
+
+      ${notes.map(
+        x =>
+        `<div class="insight">${x}</div>`
+      ).join("")}
 
 
       <div class="insight">
 
-        <b>Roster Fit:</b>
+        <b>
+          Roster-fit note:
+        </b>
 
         ${
-          gap>0
-          ? "The model sees a positive adjusted difference, but starting-lineup impact should still be considered."
-          : "The model does not see a positive adjusted difference. Your roster construction may still change the practical impact."
+          gap > 0
+          ?
+          "The model sees a positive adjusted difference, but your starting lineup and depth should still be checked manually."
+          :
+          "The model sees no positive adjusted difference; roster fit may still change the practical impact."
         }
 
       </div>
@@ -2028,11 +2290,13 @@ function analyze(){
 
       <div class="insight">
 
-        <b>League:</b>
+        <b>
+          League:
+        </b>
 
         ${S().teams}-team •
         ${S().sc.toUpperCase()} •
-        ${S().qb==="sf"?"Superflex":"1QB"} •
+        ${S().qb === "sf" ? "Superflex" : "1QB"} •
         TE Premium ${S().te}
 
       </div>
@@ -2040,33 +2304,28 @@ function analyze(){
 
       <div class="insight">
 
-        <b>Important:</b>
+        <b>
+          Data limitation:
+        </b>
 
-        Player values in this version are built-in estimates.
+        Player values are built-in estimates.
         They are not live projections, injury reports,
         or real-time market values.
 
       </div>
 
 
-      <div style="
-        display:flex;
-        gap:8px;
-        margin-top:15px;
-      ">
+      <div
+        class="actions"
+        style="margin-top:12px"
+      >
 
-        <button
-          class="btn btn-primary"
-          id="save"
-          style="flex:1">
-          💾 Save Trade
+        <button id="save">
+          Save Trade
         </button>
 
-        <button
-          class="btn"
-          id="copy"
-          style="flex:1">
-          📋 Copy
+        <button id="copy">
+          Copy Summary
         </button>
 
       </div>
@@ -2074,15 +2333,22 @@ function analyze(){
     `;
 
 
-    $("save").onclick=save;
-    $("copy").onclick=copy;
+    $("save").onclick =
+    save;
+
+
+    $("copy").onclick =
+    copy;
+
 
     $("result").scrollIntoView({
       behavior:"smooth"
     });
 
 
-  }catch(e){
+  }
+
+  catch(e){
 
     console.error(e);
 
@@ -2096,31 +2362,46 @@ function analyze(){
 
 
 /* =========================================================
-   SAVE
-========================================================= */
+   SAVE TRADE
+   ========================================================= */
 
 async function save(){
 
-  const trade={
+  const trade = {
 
-    date:new Date().toISOString(),
+    id:
+    crypto.randomUUID
+    ?
+    crypto.randomUUID()
+    :
+    Date.now().toString(),
 
-    g:[...G],
+    date:
+    new Date().toISOString(),
 
-    r:[...R],
+    g:[
+      ...G
+    ],
 
-    settings:S()
+    r:[
+      ...R
+    ],
+
+    settings:
+    S()
 
   };
 
 
-  let h=
-    safeJSON(
-      "tc_history",
-      []
-    );
+  let h =
+  safeJSON(
+    "tc_history",
+    []
+  );
+
 
   h.unshift(trade);
+
 
   localStorage.setItem(
     "tc_history",
@@ -2135,52 +2416,63 @@ async function save(){
     currentUser
   ){
 
-    const {error}=
-      await supabaseClient
-        .from("trades")
-        .insert({
+    const {error} =
+    await supabaseClient
+    .from("trades")
+    .upsert({
 
-          user_id:
-            currentUser.id,
+      user_id:
+      currentUser.id,
 
-          give_players:
-            G,
+      client_id:
+      trade.id,
 
-          receive_players:
-            R,
+      give_players:
+      trade.g,
 
-          league_settings:
-            S(),
+      receive_players:
+      trade.r,
 
-          result:{
-            give:Math.round(raw(G)),
-            receive:Math.round(raw(R))
-          },
+      league_settings:
+      trade.settings,
 
-          created_at:
-            trade.date
+      result:
+      {
+        local:true
+      },
 
-        });
+      created_at:
+      trade.date
+
+    },{
+      onConflict:
+      "user_id,client_id"
+    });
 
 
     if(error){
 
       alert(
-        "Saved locally, but cloud save failed: "
+        "Saved on this device, but cloud save failed: "
         + error.message
       );
+
+      history();
 
       return;
 
     }
 
-    await history();
+
+    history();
 
     alert(
       "Trade saved to your account."
     );
 
-  }else{
+  }
+
+  else{
 
     history();
 
@@ -2194,46 +2486,33 @@ async function save(){
 
 
 /* =========================================================
-   COPY
-========================================================= */
+   COPY SUMMARY
+   ========================================================= */
 
 async function copy(){
 
-  const text=
-`TradeCheck AI
+  const text =
+  $("result").innerText;
 
-You Give:
-${G.map(n=>nm(n)).join(", ")}
-
-You Receive:
-${R.map(n=>nm(n)).join(", ")}
-
-Give Value:
-${Math.round(raw(G))}
-
-Receive Value:
-${Math.round(raw(R))}
-
-League:
-${S().teams}-team
-${S().sc.toUpperCase()}
-${S().qb==="sf"?"Superflex":"1QB"}
-${nm(S().type)}
-
-TradeCheck AI analysis.`;
 
   try{
 
-    await navigator.clipboard.writeText(text);
-
-    alert(
-      "Trade summary copied."
+    await navigator.clipboard.writeText(
+      "TradeCheck AI\n\n" +
+      text
     );
 
-  }catch(e){
 
     alert(
-      "Copy failed. Try again."
+      "Trade analysis copied."
+    );
+
+  }
+
+  catch(e){
+
+    alert(
+      "Could not copy automatically."
     );
 
   }
@@ -2242,158 +2521,53 @@ TradeCheck AI analysis.`;
 
 
 /* =========================================================
-   HISTORY
-========================================================= */
-
-async function history(){
-
-  const box=$("hist");
-
-  box.innerHTML="";
-
-  let local=
-    safeJSON(
-      "tc_history",
-      []
-    );
-
-
-  if(
-    CLOUD_ENABLED &&
-    currentUser
-  ){
-
-    const {data,error}=
-      await supabaseClient
-        .from("trades")
-        .select("*")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .order(
-          "created_at",
-          {ascending:false}
-        )
-        .limit(50);
-
-
-    if(!error && data){
-
-      local=
-        data.map(t=>({
-
-          date:t.created_at,
-
-          g:t.give_players || [],
-
-          r:t.receive_players || [],
-
-          settings:
-            t.league_settings || {},
-
-          cloud:true
-
-        }));
-
-    }
-
-  }
-
-
-  if(!local.length){
-
-    box.innerHTML=
-      `<div class="empty">
-        No saved trades yet.
-      </div>`;
-
-    return;
-
-  }
-
-
-  local.forEach(t=>{
-
-    const div=
-      document.createElement("div");
-
-    div.className=
-      "history-item";
-
-    div.innerHTML=`
-
-      <div class="history-top">
-
-        <b>
-          ${new Date(t.date)
-            .toLocaleDateString()}
-        </b>
-
-        <span class="history-date">
-          ${t.cloud?"☁️ Cloud":"📱 Device"}
-        </span>
-
-      </div>
-
-      <div class="history-players">
-
-        <div>
-          You gave:
-          ${t.g.map(n=>nm(n)).join(", ")}
-        </div>
-
-        <div style="margin-top:5px">
-          You received:
-          ${t.r.map(n=>nm(n)).join(", ")}
-        </div>
-
-      </div>
-
-    `;
-
-    box.appendChild(div);
-
-  });
-
-}
-
-
-/* =========================================================
-   SUPABASE AUTH
-========================================================= */
+   AUTH
+   ========================================================= */
 
 async function refreshAuth(){
 
   if(!CLOUD_ENABLED){
 
-    $("authMsg").textContent=
-      "Cloud accounts are not connected yet. Add your Supabase URL and public anon key.";
+    $("authMsg").textContent =
+    "Cloud accounts are not connected yet. Add your Supabase URL and anon key in the configuration.";
 
     return;
 
   }
 
 
-  const {data}=
-    await supabaseClient.auth.getSession();
+  const {
+    data
+  } =
+  await supabaseClient
+  .auth
+  .getSession();
 
-  currentUser=
-    data.session?.user || null;
+
+  currentUser =
+  data.session?.user || null;
+
 
   updateAuthUI();
 
 
-  supabaseClient.auth.onAuthStateChange(
-    (_event,session)=>{
+  supabaseClient
+  .auth
+  .onAuthStateChange(
+    (_event,session) => {
 
-      currentUser=
-        session?.user || null;
+      currentUser =
+      session?.user || null;
+
 
       updateAuthUI();
 
-      if(currentUser)
+
+      if(currentUser){
+
         history();
+
+      }
 
     }
   );
@@ -2401,194 +2575,273 @@ async function refreshAuth(){
 }
 
 
+/* =========================================================
+   UPDATE ACCOUNT UI
+   ========================================================= */
+
 function updateAuthUI(){
 
   $("authLoggedOut")
-    .classList
-    .toggle(
-      "hidden",
-      !!currentUser
-    );
+  .classList
+  .toggle(
+    "hidden",
+    !!currentUser
+  );
+
 
   $("authLoggedIn")
-    .classList
-    .toggle(
-      "hidden",
-      !currentUser
-    );
+  .classList
+  .toggle(
+    "hidden",
+    !currentUser
+  );
 
 
   if(currentUser){
 
-    $("userEmail").textContent=
-      currentUser.email || "";
+    $("userEmail").textContent =
+    currentUser.email || "";
 
-    $("syncMsg").textContent=
-      "Your cloud trade history is connected.";
+
+    $("syncMsg").textContent =
+    "Your cloud trade history is connected.";
 
   }
 
 }
 
+
+/* =========================================================
+   SIGN UP
+   ========================================================= */
 
 async function doSignUp(){
 
   if(!CLOUD_ENABLED){
 
-    $("authMsg").textContent=
-      "Connect Supabase first.";
+    $("authMsg").textContent =
+    "Connect Supabase first.";
 
     return;
 
   }
 
 
-  const email=
-    $("authEmail")
-      .value
-      .trim();
+  const email =
+  $("authEmail")
+  .value
+  .trim();
 
-  const password=
-    $("authPassword")
-      .value;
+
+  const password =
+  $("authPassword")
+  .value;
 
 
   if(
     !email ||
-    password.length<6
+    password.length < 6
   ){
 
-    $("authMsg").textContent=
-      "Enter an email and a password with at least 6 characters.";
+    $("authMsg").textContent =
+    "Enter an email and a password with at least 6 characters.";
 
     return;
 
   }
 
 
-  const {error}=
-    await supabaseClient.auth.signUp({
-
-      email,
-      password
-
-    });
-
-
-  $("authMsg").textContent=
+  const {
     error
-      ? error.message
-      : "Account created. Check your email if confirmation is required.";
+  } =
+  await supabaseClient
+  .auth
+  .signUp({
+
+    email,
+    password
+
+  });
+
+
+  $("authMsg").textContent =
+  error
+  ?
+  error.message
+  :
+  "Account created. Check your email if confirmation is required, then log in.";
 
 }
 
+
+/* =========================================================
+   SIGN IN
+   ========================================================= */
 
 async function doSignIn(){
 
   if(!CLOUD_ENABLED){
 
-    $("authMsg").textContent=
-      "Connect Supabase first.";
+    $("authMsg").textContent =
+    "Connect Supabase first.";
 
     return;
 
   }
 
 
-  const email=
-    $("authEmail")
-      .value
-      .trim();
-
-  const password=
-    $("authPassword")
-      .value;
+  const email =
+  $("authEmail")
+  .value
+  .trim();
 
 
-  const {error}=
-    await supabaseClient.auth.signInWithPassword({
-
-      email,
-      password
-
-    });
+  const password =
+  $("authPassword")
+  .value;
 
 
-  $("authMsg").textContent=
+  const {
     error
-      ? error.message
-      : "Logged in.";
+  } =
+  await supabaseClient
+  .auth
+  .signInWithPassword({
+
+    email,
+    password
+
+  });
+
+
+  $("authMsg").textContent =
+  error
+  ?
+  error.message
+  :
+  "Logged in.";
 
 }
 
+
+/* =========================================================
+   SIGN OUT
+   ========================================================= */
 
 async function doSignOut(){
 
   if(!supabaseClient)
     return;
 
-  await supabaseClient.auth.signOut();
+
+  await supabaseClient
+  .auth
+  .signOut();
 
 }
 
+
+/* =========================================================
+   CLOUD SYNC
+   ========================================================= */
 
 async function syncNow(){
 
   if(!currentUser){
 
-    $("syncMsg").textContent=
-      "Log in first.";
+    $("syncMsg").textContent =
+    "Log in first.";
 
     return;
 
   }
 
 
-  const local=
-    safeJSON(
-      "tc_history",
-      []
+  const local =
+  safeJSON(
+    "tc_history",
+    []
+  );
+
+
+  let added = 0;
+
+
+  for(
+    const t of local
+  ){
+
+    const clientId =
+    t.id ||
+    (
+      crypto.randomUUID
+      ?
+      crypto.randomUUID()
+      :
+      Date.now().toString()
     );
 
 
-  let added=0;
+    if(!t.id){
+
+      t.id =
+      clientId;
+
+    }
 
 
-  for(const t of local){
+    const {
+      error
+    } =
+    await supabaseClient
+    .from("trades")
+    .upsert({
 
-    const {error}=
-      await supabaseClient
-        .from("trades")
-        .insert({
+      user_id:
+      currentUser.id,
 
-          user_id:
-            currentUser.id,
+      client_id:
+      clientId,
 
-          give_players:
-            t.g,
+      give_players:
+      t.g || [],
 
-          receive_players:
-            t.r,
+      receive_players:
+      t.r || [],
 
-          league_settings:
-            t.settings || S(),
+      league_settings:
+      t.settings || S(),
 
-          result:{},
+      result:
+      {},
 
-          created_at:
-            t.date
+      created_at:
+      t.date || new Date().toISOString()
 
-        });
+    },{
+      onConflict:
+      "user_id,client_id"
+    });
 
 
-    if(!error)
+    if(!error){
+
       added++;
+
+    }
 
   }
 
 
-  $("syncMsg").textContent=
-    `Synced ${added} local trade${added===1?"":"s"}.`;
+  localStorage.setItem(
+    "tc_history",
+    JSON.stringify(local)
+  );
+
+
+  $("syncMsg").textContent =
+  `Synced ${added} local trade${added === 1 ? "" : "s"}.`;
+
 
   await history();
 
@@ -2596,175 +2849,575 @@ async function syncNow(){
 
 
 /* =========================================================
-   BUTTONS
-========================================================= */
+   HISTORY
+   ========================================================= */
 
-$("signUp").onclick=
-  doSignUp;
+async function history(){
 
-$("signIn").onclick=
-  doSignIn;
+  let local =
+  safeJSON(
+    "tc_history",
+    []
+  );
 
-$("signOut").onclick=
-  doSignOut;
 
-$("syncNow").onclick=
-  syncNow;
+  let cloud = [];
+
+
+  if(
+    CLOUD_ENABLED &&
+    currentUser
+  ){
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+    .from("trades")
+    .select("*")
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    )
+    .limit(100);
+
+
+    if(!error && data){
+
+      cloud =
+      data.map(t => ({
+
+        id:
+        t.client_id ||
+        t.id,
+
+        date:
+        t.created_at,
+
+        g:
+        t.give_players || [],
+
+        r:
+        t.receive_players || [],
+
+        settings:
+        t.league_settings || {}
+
+      }));
+
+    }
+
+  }
+
+
+  const all =
+  cloud.length
+  ?
+  cloud
+  :
+  local;
+
+
+  $("hist").innerHTML =
+  all.length
+
+  ?
+
+  all.map(
+    (t,i) => `
+
+      <div class="history">
+
+        <b>
+          ${new Date(t.date).toLocaleString()}
+        </b>
+
+        <p>
+
+          <b>
+            You give:
+          </b>
+
+          ${
+            (t.g || [])
+            .map(nm)
+            .join(", ") ||
+            "None"
+          }
+
+          <br>
+
+          <b>
+            You receive:
+          </b>
+
+          ${
+            (t.r || [])
+            .map(nm)
+            .join(", ") ||
+            "None"
+          }
+
+        </p>
+
+
+        <div class="actions">
+
+          <button
+            onclick="loadTrade(${i})"
+          >
+            Load
+          </button>
+
+          <button
+            class="remove"
+            onclick="deleteTrade('${t.id || ""}')"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    `
+  ).join("")
+
+  :
+
+  '<p class="small">No saved trades yet.</p>';
+
+}
 
 
 /* =========================================================
-   TABS
-========================================================= */
+   LOAD TRADE
+   ========================================================= */
+
+async function loadTrade(index){
+
+  let local =
+  safeJSON(
+    "tc_history",
+    []
+  );
+
+
+  let cloud = [];
+
+
+  if(
+    CLOUD_ENABLED &&
+    currentUser
+  ){
+
+    const {
+      data
+    } =
+    await supabaseClient
+    .from("trades")
+    .select("*")
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    )
+    .limit(100);
+
+
+    if(data){
+
+      cloud =
+      data.map(t => ({
+
+        id:
+        t.client_id || t.id,
+
+        date:
+        t.created_at,
+
+        g:
+        t.give_players || [],
+
+        r:
+        t.receive_players || [],
+
+        settings:
+        t.league_settings || {}
+
+      }));
+
+    }
+
+  }
+
+
+  const all =
+  cloud.length
+  ?
+  cloud
+  :
+  local;
+
+
+  const t =
+  all[index];
+
+
+  if(!t)
+    return;
+
+
+  G =
+  [...(t.g || [])];
+
+
+  R =
+  [...(t.r || [])];
+
+
+  if(t.settings){
+
+    if(t.settings.type)
+      $("type").value =
+      t.settings.type;
+
+    if(t.settings.sc)
+      $("scoring").value =
+      t.settings.sc;
+
+    if(t.settings.qb)
+      $("qb").value =
+      t.settings.qb;
+
+    if(t.settings.teams)
+      $("teams").value =
+      t.settings.teams;
+
+    if(t.settings.te !== undefined)
+      $("te").value =
+      t.settings.te;
+
+    if(t.settings.pkg !== undefined)
+      $("pkg").value =
+      t.settings.pkg ? "1" : "0";
+
+  }
+
+
+  render();
+
+
+  document.querySelector(
+    '[data-tab="trade"]'
+  ).click();
+
+
+  alert(
+    "Trade loaded."
+  );
+
+}
+
+
+/* =========================================================
+   DELETE TRADE
+   ========================================================= */
+
+async function deleteTrade(id){
+
+  if(
+    !confirm(
+      "Delete this trade?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    CLOUD_ENABLED &&
+    currentUser &&
+    id
+  ){
+
+    await supabaseClient
+    .from("trades")
+    .delete()
+    .eq(
+      "user_id",
+      currentUser.id
+    )
+    .eq(
+      "client_id",
+      id
+    );
+
+  }
+
+
+  let h =
+  safeJSON(
+    "tc_history",
+    []
+  );
+
+
+  h =
+  h.filter(
+    t => t.id !== id
+  );
+
+
+  localStorage.setItem(
+    "tc_history",
+    JSON.stringify(h)
+  );
+
+
+  history();
+
+}
+
+
+/* =========================================================
+   TAB SYSTEM
+   ========================================================= */
 
 document
 .querySelectorAll(".tab")
-.forEach(button=>{
+.forEach(
+  b => {
 
-  button.onclick=()=>{
+    b.onclick = () => {
 
-    document
+      document
       .querySelectorAll(".tab")
-      .forEach(x=>
-        x.classList.remove("active")
+      .forEach(
+        x =>
+        x.classList.remove(
+          "active"
+        )
       );
 
-    document
+
+      document
       .querySelectorAll(".panel")
-      .forEach(x=>
-        x.classList.remove("active")
+      .forEach(
+        x =>
+        x.classList.remove(
+          "active"
+        )
       );
 
 
-    button.classList.add("active");
-
-    $(button.dataset.tab)
-      .classList
-      .add("active");
+      b.classList.add(
+        "active"
+      );
 
 
-    if(
-      button.dataset.tab==="history"
-    )
-      history();
+      $(b.dataset.tab)
+      .classList.add(
+        "active"
+      );
 
-  };
 
-});
+      if(
+        b.dataset.tab ===
+        "history"
+      ){
+
+        history();
+
+      }
+
+    };
+
+  }
+);
 
 
 /* =========================================================
-   INPUTS
-========================================================= */
+   SEARCH EVENTS
+   ========================================================= */
 
-$("give").oninput=
-  ()=>search(
-    "give",
-    "gs",
-    "g"
-  );
-
-
-$("recv").oninput=
-  ()=>search(
-    "recv",
-    "rs",
-    "r"
-  );
+$("give").oninput =
+() =>
+search(
+  "give",
+  "gs",
+  "g"
+);
 
 
-$("rosterSearch").oninput=
-  ()=>search(
-    "rosterSearch",
-    "rSug",
-    "m"
-  );
+$("recv").oninput =
+() =>
+search(
+  "recv",
+  "rs",
+  "r"
+);
 
 
-$("analyze").onclick=
-  analyze;
+$("rosterSearch").oninput =
+() =>
+search(
+  "rosterSearch",
+  "rSug",
+  "m"
+);
 
 
-$("swap").onclick=()=>{
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
-  [G,R]=[R,G];
+$("analyze").onclick =
+analyze;
+
+
+$("swap").onclick =
+() => {
+
+  [
+    G,
+    R
+  ] =
+  [
+    R,
+    G
+  ];
+
 
   render();
 
 };
 
 
-$("clear").onclick=()=>{
+$("clear").onclick =
+() => {
 
-  G=[];
-  R=[];
+  G = [];
 
-  $("result")
-    .style
-    .display="none";
+  R = [];
+
+  $("result").style.display =
+  "none";
 
   render();
 
 };
 
 
-$("clearHist").onclick=()=>{
+$("clearHist").onclick =
+() => {
 
   if(
-    confirm(
+    !confirm(
       "Clear all local trade history?"
     )
   ){
 
-    localStorage.removeItem(
-      "tc_history"
-    );
-
-    history();
+    return;
 
   }
 
+
+  localStorage.removeItem(
+    "tc_history"
+  );
+
+
+  history();
+
 };
 
 
-$("export").onclick=()=>{
+$("export").onclick =
+() => {
 
-  const data=
-    localStorage.getItem(
-      "tc_history"
-    ) || "[]";
+  const data =
+  localStorage.getItem(
+    "tc_history"
+  ) ||
+  "[]";
 
 
-  const a=
-    document.createElement("a");
+  const blob =
+  new Blob(
+    [data],
+    {
+      type:"application/json"
+    }
+  );
 
-  a.href=
-    "data:application/json;charset=utf-8,"
-    +encodeURIComponent(data);
 
-  a.download=
-    "tradecheck-history.json";
+  const url =
+  URL.createObjectURL(
+    blob
+  );
+
+
+  const a =
+  document.createElement(
+    "a"
+  );
+
+
+  a.href =
+  url;
+
+
+  a.download =
+  "tradecheck-history.json";
+
 
   a.click();
 
-};
 
-
-$("dark").onclick=()=>{
-
-  document
-    .body
-    .classList
-    .toggle("light");
-
-  localStorage.setItem(
-    "tc_light",
-    document.body.classList.contains("light")
+  URL.revokeObjectURL(
+    url
   );
 
 };
 
 
-$("reset").onclick=()=>{
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+$("dark").onclick =
+() => {
+
+  document.body
+  .classList
+  .toggle(
+    "dark"
+  );
+
+
+  localStorage.setItem(
+    "tc_dark",
+    document.body
+    .classList
+    .contains("dark")
+  );
+
+};
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+$("reset").onclick =
+() => {
 
   if(
     confirm(
@@ -2782,18 +3435,18 @@ $("reset").onclick=()=>{
 
 
 /* =========================================================
-   START
-========================================================= */
+   INITIALIZE
+   ========================================================= */
 
 if(
-  localStorage.getItem("tc_light")
-  ==="true"
+  localStorage.getItem(
+    "tc_dark"
+  ) === "true"
 ){
 
-  document
-    .body
-    .classList
-    .add("light");
+  document.body
+  .classList
+  .add("dark");
 
 }
 
